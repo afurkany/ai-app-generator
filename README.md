@@ -1,6 +1,8 @@
 # AI Based App Generator
 
-This repository provides a test-driven application generation process to the users. 
+This repository provides a test-driven application generation process to the users.
+
+The project is still in development phase. The readme will be update when the first release is done.
 
 ## Tauri + Angular + Python
 
