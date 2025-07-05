@@ -1,0 +1,82 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  gap: 16px; /* space between items */
+  margin-top: 20px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border: 1px solid #2c2c2c;
+  border-radius: 6px;
+  background-color: #C4E1E6;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addProjectIcon, .removeAllProjectsIcon {
+  color: #254d70;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
+  justify-content: left;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: #2c2c2c;
+}
+
+.subtitle {
+  display: flex;
+  justify-content: left;
+  padding-left: 10px;
+  font-size: 0.875rem;
+  color: rgb(144, 144, 138);
+  word-break: break-all;
+  white-space: normal;
+  /* overflow-wrap: anywhere; */
+  flex-wrap: nowrap;
+}
+
+.right button {
+  margin: 4px;
+}
+
+.right button:hover {
+  background-color: rgba(0, 213, 255, 0.1);
+}
+
+.searchBar {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  width: 50%;
+  min-width: 200px;
+}
+
+mat-form-field.searchInput {
+  height: 56px;
+}

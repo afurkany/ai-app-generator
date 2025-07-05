@@ -1,0 +1,59 @@
+<h1>Welcome to Test-Driven App Creator!</h1>
+<div>
+  <p>
+    Click
+    <a href="https://www.w3schools.com/html/" title="Go to W3Schools HTML section">here</a>
+    to go to the project reppository
+  </p>
+</div>
+
+<div class="searchBar">
+  <mat-form-field appearance="outline" class="searchInput">
+    <mat-label>Search project</mat-label>
+    <input matInput [(ngModel)]="searchValue">
+
+    <button mat-icon-button matSuffix *ngIf="searchValue.length > 0" (click)="resetSearchValue()" tabindex="-1">
+      <mat-icon>clear</mat-icon>
+    </button>
+
+    <mat-icon matSuffix *ngIf="searchValue.length === 0">search</mat-icon>
+  </mat-form-field>
+
+  <button mat-icon-button (click)="selectFolder()" [matTooltip]="translate.get('homeComponent.addProject')">
+    <mat-icon class="addProjectIcon">add_circle</mat-icon>
+  </button>
+
+  <button mat-icon-button (click)="openRemoveMultipleFileDialog('0ms', '0ms')" [matTooltip]="translate.get('homeComponent.removeAllProjects')">
+    <mat-icon class="removeAllProjectsIcon">delete_forever</mat-icon>
+  </button>
+</div>
+
+<div class="container">
+  <mat-card appearance="outlined" class="card" *ngFor="let project of filteredProjects()">
+    <div class="card-header">
+      <div class="left">
+        <div class="title">{{ project.name }}</div>
+        <div class="subtitle" [matTooltip]="project.path">{{ project.path | endEllipsis:20 }}</div>
+      </div>
+      <div class="right">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" xPosition="after">
+          <button mat-menu-item>
+            <mat-icon>edit</mat-icon>
+            <span>Edit Project</span>
+          </button>
+          <button mat-menu-item (click)="openFolder(project.path)">
+            <mat-icon>launch</mat-icon>
+            <span>Go to Folder</span>
+          </button>
+          <button mat-menu-item (click)="openRemoveSingleFileDialog('0ms', '0ms', project.path)">
+            <mat-icon>delete_forever</mat-icon>
+            <span>Remove</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </mat-card>
+</div>
