@@ -1,4 +1,4 @@
-<h1>Welcome to AI App Generator!</h1>
+<h1 class="appTitle">Welcome to AI App Generator!</h1>
 <div>
   <p>
     Click
@@ -31,7 +31,7 @@
 <hr />
 
 <div *ngIf="filteredProjects().length === 0">
-  <h2>There is no project. Please create a project to continue.</h2>
+  <h2 class="noProjectInfo">There is no project yet. Please create a project to continue.</h2>
 </div>
 
 <div class="container" *ngIf="filteredProjects().length > 0">

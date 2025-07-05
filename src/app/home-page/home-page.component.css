@@ -77,6 +77,14 @@
   min-width: 200px;
 }
 
+.appTitle, .noProjectInfo {
+  color: #254d70;
+}
+
+.noProjectInfo {
+  font-weight: 400;
+}
+
 hr {
   border: 1px solid #e7e9eb;
   margin: 50px 0;
