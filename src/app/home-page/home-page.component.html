@@ -1,8 +1,8 @@
-<h1>Welcome to Test-Driven App Creator!</h1>
+<h1>Welcome to AI App Generator!</h1>
 <div>
   <p>
     Click
-    <a href="https://www.w3schools.com/html/" title="Go to W3Schools HTML section">here</a>
+    <a href="https://github.com/afurkany/ai-app-generator" title="Github repository">here</a>
     to go to the project reppository
   </p>
 </div>
@@ -28,7 +28,13 @@
   </button>
 </div>
 
-<div class="container">
+<hr />
+
+<div *ngIf="filteredProjects().length === 0">
+  <h2>There is no project. Please create a project to continue.</h2>
+</div>
+
+<div class="container" *ngIf="filteredProjects().length > 0">
   <mat-card appearance="outlined" class="card" *ngFor="let project of filteredProjects()">
     <div class="card-header">
       <div class="left">
