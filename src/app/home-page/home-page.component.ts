@@ -20,6 +20,7 @@ import { EndEllipsisPipe } from '../common/endEllipsisPipe';
 import { ProjectInfo } from '../common/utility';
 import { TranslateService } from '../services/translate.service';
 import { ApiService } from '../services/api.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -50,12 +51,13 @@ export class HomePageComponent implements OnInit{
   readonly dialog = inject(MatDialog);
   
   constructor(
+    private router: Router,
     private apiService: ApiService,
-    public translate: TranslateService,
+    public translateService: TranslateService,
   ) {}
 
   ngOnInit(): void {
-    this.translate.use('en');
+    this.translateService.use('en');
 
     this.apiService.getProjects().subscribe((res) => {
       console.log("res: ", res);
@@ -114,6 +116,11 @@ export class HomePageComponent implements OnInit{
     this.apiService.removeAllProjects().subscribe((res) => {
       this.projectList = [... res];
     });
+  }
+
+  directToProject(projectName: string) {
+    console.log("projectName: ", projectName);
+    this.router.navigate(['/project']);
   }
 
   async selectFolder(): Promise<void> {
