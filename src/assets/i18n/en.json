@@ -2,5 +2,14 @@
   "homeComponent": {
     "addProject": "Add project",
     "removeAllProjects": "Remove all projects"
+  },
+  "projectComponent": {
+    "minimizeSideNav": "Toogle SideNav",
+    "home": "Home",
+    "explorer": "Explorer",
+    "attachedFiles": "Attached files",
+    "search": "Search",
+    "sourceControl": "Source control",
+    "settings": "Settings"
   }
 }

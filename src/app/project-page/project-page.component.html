@@ -1,0 +1,64 @@
+
+<div class="container">
+	<div class="sideBar">
+		<div class="sideNavRelatedItemsDiv">
+			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.minimizeSideNav')" (click)="onMinimizeSideNav()">
+				<mat-icon>menu</mat-icon>
+			</button>
+
+			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.explorer')" (click)="onShowExplorer()">
+				<mat-icon>folder</mat-icon>
+			</button>
+
+			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.attachedFiles')" (click)="onShowAttachedFiles()">
+				<mat-icon>attach_file</mat-icon>
+			</button>
+
+			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.search')" (click)="onShowSearchInExplorer()">
+				<mat-icon>search</mat-icon>
+			</button>
+
+			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.sourceControl')" (click)="onShowFileComparison()">
+				<mat-icon>compare_arrows</mat-icon>
+			</button>
+		</div>
+		
+		<div class="homeAndSettingsDiv">
+			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.home')" (click)="directToProject()">
+				<mat-icon>home</mat-icon>
+			</button>
+
+			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.settings')" (click)="onShowSettings('0ms', '0ms')">
+				<mat-icon>settings</mat-icon>
+			</button>
+		</div>
+		
+	</div>
+
+	<div class="sideNav" *ngIf="isAnySideNavStateActive" [style.width.px]="sidenavWidth">
+		<div class="sideNavExplorer" *ngIf="this.sideNavState.isShowExplorer">
+
+		</div>
+
+		<div class="sideNavAttachedFiles" *ngIf="this.sideNavState.isShowAttachedFiles">
+
+		</div>
+
+		<div class="sideNavSearch" *ngIf="this.sideNavState.isShowSearchInExplorer">
+
+		</div>
+
+		<div class="sideNavSourceControl" *ngIf="this.sideNavState.isShowSourceControl">
+
+		</div>
+	</div>
+
+	<div 
+		class="resizer"
+		(mousedown)="startResize()">
+	</div>
+
+	<div class="chatArea">
+
+	</div>
+</div>
