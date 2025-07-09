@@ -2,53 +2,81 @@
 <div class="container">
 	<div class="sideBar">
 		<div class="sideNavRelatedItemsDiv">
-			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.minimizeSideNav')" (click)="onMinimizeSideNav()">
+			<button mat-icon-button
+				matTooltipPosition="right"
+				[matTooltip]="translateService.get('projectComponent.minimizeSideNav')"
+				(click)="onMinimizeSideNav()"
+			>
 				<mat-icon>menu</mat-icon>
 			</button>
 
-			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.explorer')" (click)="onShowExplorer()">
+			<button mat-icon-button
+				matTooltipPosition="right"
+				[matTooltip]="translateService.get('projectComponent.explorer')"
+				(click)="onShowExplorer()"
+			>
 				<mat-icon>folder</mat-icon>
 			</button>
 
-			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.attachedFiles')" (click)="onShowAttachedFiles()">
+			<button mat-icon-button
+				matTooltipPosition="right"
+				[matTooltip]="translateService.get('projectComponent.attachedFiles')"
+				(click)="onShowAttachedFiles()"
+			>
 				<mat-icon>attach_file</mat-icon>
 			</button>
 
-			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.search')" (click)="onShowSearchInExplorer()">
+			<button mat-icon-button
+				matTooltipPosition="right"
+				[matTooltip]="translateService.get('projectComponent.search')"
+				(click)="onShowSearchInExplorer()"
+			>
 				<mat-icon>search</mat-icon>
 			</button>
 
-			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.sourceControl')" (click)="onShowFileComparison()">
+			<button mat-icon-button
+				matTooltipPosition="right"
+				[matTooltip]="translateService.get('projectComponent.sourceControl')"
+				(click)="onShowFileComparison()"
+			>
 				<mat-icon>compare_arrows</mat-icon>
 			</button>
 		</div>
 		
 		<div class="homeAndSettingsDiv">
-			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.home')" (click)="directToProject()">
+			<button mat-icon-button 
+				matTooltipPosition="right"
+				[matTooltip]="translateService.get('projectComponent.home')"
+				(click)="directToProject()"
+			>
 				<mat-icon>home</mat-icon>
 			</button>
 
-			<button mat-icon-button matTooltipPosition="right" [matTooltip]="translateService.get('projectComponent.settings')" (click)="onShowSettings('0ms', '0ms')">
+			<button mat-icon-button 
+				matTooltipPosition="right"
+				[matTooltip]="translateService.get('projectComponent.settings')"
+				(click)="onShowSettings('0ms', '0ms')"
+			>
 				<mat-icon>settings</mat-icon>
 			</button>
 		</div>
 		
 	</div>
 
-	<div class="sideNav" *ngIf="isAnySideNavStateActive" [style.width.px]="sidenavWidth">
-		<div class="sideNavExplorer" *ngIf="this.sideNavState.isShowExplorer">
+	<div class="sideNav" [ngClass]="{ 'is-hidden': !isAnySideNavStateActive }" [style.width.px]="sidenavWidth">
+		<div class="sideNavExplorer" [ngClass]="{ 'is-hidden': sideNavState !== 'explorer' }">
 
 		</div>
 
-		<div class="sideNavAttachedFiles" *ngIf="this.sideNavState.isShowAttachedFiles">
+		<div class="sideNavAttachedFiles" [ngClass]="{ 'is-hidden': sideNavState !== 'attachedFiles' }">
+			<app-file-attachment></app-file-attachment>
+		</div>
+
+		<div class="sideNavSearch" [ngClass]="{ 'is-hidden': sideNavState !== 'search' }">
 
 		</div>
 
-		<div class="sideNavSearch" *ngIf="this.sideNavState.isShowSearchInExplorer">
-
-		</div>
-
-		<div class="sideNavSourceControl" *ngIf="this.sideNavState.isShowSourceControl">
+		<div class="sideNavSourceControl" [ngClass]="{ 'is-hidden': sideNavState !== 'sourceControl' }">
 
 		</div>
 	</div>

@@ -11,5 +11,8 @@
     "search": "Search",
     "sourceControl": "Source control",
     "settings": "Settings"
+  },
+  "fileAttachmentComponent": {
+    "uploadFileButton": "Upload file"
   }
 }
