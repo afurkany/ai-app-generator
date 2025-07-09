@@ -139,8 +139,6 @@ export class HomePageComponent implements OnInit{
   }
 
   async openFolder(projectPath: string): Promise<void> {
-    // projectPath = projectPath.replace(/\\/g, '/');
-
     try {
       await openPath(projectPath);
     } catch (error) {

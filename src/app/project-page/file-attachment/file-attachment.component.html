@@ -1,0 +1,44 @@
+<div class="mainContainer" #mainContainer>
+	<div class="mainTitle">
+		<h1>Files</h1>
+		<button mat-icon-button [matMenuTriggerFor]="removeMultiple">
+			<mat-icon>more_vert</mat-icon>
+		</button>
+		<mat-menu #removeMultiple="matMenu">
+			<button mat-menu-item (click)="onClickRemoveAll()">
+				<span>Remove all</span>
+			</button>
+		</mat-menu>
+	</div>
+	<h2 class="fileNotAvailableNote" *ngIf="!isAnyFileUploaded">There is no file uploaded yet.</h2>
+
+	<div class="fileNameCardContainer" *ngIf="isAnyFileUploaded">
+		<div class="fileNameCard" *ngFor="let file of selectedfiles">
+			<mat-card class="fileCard" appearance="outlined">
+				<mat-card-actions>
+					<div class="tooltipDiv" [matTooltip]="file.name">
+						<p>{{ file.name | endEllipsis:truncateLength }}</p>
+					</div>
+					<div>
+						<button mat-icon-button [matMenuTriggerFor]="removeSingle">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #removeSingle="matMenu">
+							<button mat-menu-item (click)="onClickRemove(file)">
+								<span>Remove</span>
+							</button>
+						</mat-menu>
+					</div>
+				</mat-card-actions>
+			</mat-card>
+		</div>
+	</div>
+
+	<button mat-icon-button 
+		class="uploadButton"
+		matTooltipPosition="below"
+		[matTooltip]="translateService.get('fileAttachmentComponent.uploadFileButton')"
+		(click)="onClickUploadButton()">
+		<mat-icon>add_circle_outline</mat-icon>
+	</button>
+</div>

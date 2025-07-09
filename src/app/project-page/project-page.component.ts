@@ -10,7 +10,9 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { TranslateService } from '../services/translate.service';
 import { SettingsDialogComponent } from '../shared/settings-dialog/settings-dialog.component';
-import { SideNavState } from '../common/utility';
+import { SideNavPanel, SideNavState } from '../common/utility';
+
+import { FileAttachmentComponent } from './file-attachment/file-attachment.component';
 
 
 @Component({
@@ -21,21 +23,17 @@ import { SideNavState } from '../common/utility';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
+    FileAttachmentComponent
   ],
   templateUrl: './project-page.component.html',
   styleUrl: './project-page.component.css'
 })
 export class ProjectPageComponent implements OnInit{
 
-  // if you want to add or remove any state from below, also change the inherit from utility.ts
-  sideNavState: SideNavState = {
-    isShowExplorer: true,
-    isShowAttachedFiles: false,
-    isShowSearchInExplorer: false,
-    isShowSourceControl: false,
-  }
-  lastNavState: keyof SideNavState = "isShowExplorer";
+  // if you want to add or remove any state to SideNavPanel, change SideNavPanel from utility.ts
+  sideNavState: SideNavPanel = 'explorer';
+  lastNavState: SideNavPanel = "explorer";
   isAnySideNavStateActive = true;
   readonly dialog = inject(MatDialog);
 
@@ -54,40 +52,37 @@ export class ProjectPageComponent implements OnInit{
 
   onMinimizeSideNav() {
     let isAllCollapsed = true;
-    for (const key of Object.keys(this.sideNavState) as (keyof SideNavState)[]) {
-      if (this.sideNavState[key]) {
-        this.lastNavState = key;
-        this.sideNavState[key] = false;
-        this.isAnySideNavStateActive = false;
-        isAllCollapsed = false;
-        break;
-      };
-    }
+    if (this.sideNavState) {
+      this.lastNavState = this.sideNavState;
+      this.sideNavState = null;
+      this.isAnySideNavStateActive = false;
+      isAllCollapsed = false;
+    };
 
     if (isAllCollapsed) {
       this.isAnySideNavStateActive = true;
-      this.sideNavState[this.lastNavState] = true;
+      this.sideNavState = this.lastNavState;
     }
   }
 
   onShowExplorer() {
     this.isAnySideNavStateActive = true;
-    this.setActivePanel("isShowExplorer");
+    this.sideNavState = "explorer";
   }
 
   onShowAttachedFiles() {
     this.isAnySideNavStateActive = true;
-    this.setActivePanel("isShowAttachedFiles");
+    this.sideNavState = "attachedFiles";
   }
   
   onShowSearchInExplorer() {
     this.isAnySideNavStateActive = true;
-    this.setActivePanel("isShowSearchInExplorer");
+    this.sideNavState = "search";
   }
 
   onShowFileComparison() {
     this.isAnySideNavStateActive = true;
-    this.setActivePanel("isShowSourceControl");
+    this.sideNavState = "sourceControl";
   }
 
   onShowSettings(enterAnimationDuration: string, exitAnimationDuration: string): void {
@@ -117,7 +112,8 @@ export class ProjectPageComponent implements OnInit{
         const newWidth = e.clientX - this.xOffset;
         // clamp min/max values
         const vwUnit = window.innerWidth / 100;
-        this.sidenavWidth = Math.max(vwUnit * 10, Math.min(newWidth, vwUnit * 80));
+        console.log("vwUnit: ", vwUnit);
+        this.sidenavWidth = Math.max(400, Math.min(newWidth, vwUnit * 80));
       }
     };
 
@@ -129,11 +125,5 @@ export class ProjectPageComponent implements OnInit{
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }
-
-  private setActivePanel(targetKey: keyof SideNavState) {
-    for (const key of Object.keys(this.sideNavState) as (keyof SideNavState)[]) {
-      this.sideNavState[key] = (key === targetKey);
-    }
   }
 }

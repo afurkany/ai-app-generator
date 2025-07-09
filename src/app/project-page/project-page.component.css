@@ -3,7 +3,7 @@
 	flex-direction: row;
   height: 100vh;
   margin: 0;
-	background-color: green;
+	background-color: azure
 }
 
 .sideBar {
@@ -35,7 +35,7 @@
 .sideNav {
 	display: flex;
 	height: 100%;
-	background-color: yellow;
+	min-width: 400px;
 }
 
 .resizer {
@@ -43,7 +43,7 @@
   cursor: ew-resize;
 	user-select: none;
 	flex-shrink: 0;
-  background-color: #e7e9eb;
+  background-color: #00ffff;
 }
 
 .sideNavExplorer {
@@ -55,9 +55,10 @@
 
 .sideNavAttachedFiles {
 	display: flex;
+	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	background-color: rgb(247, 0, 251);
+	background-color: azure;
 }
 
 .sideNavSearch {
@@ -86,4 +87,8 @@
 	flex: 1;
 	height: 100%;
 	background-color: blue;
+}
+
+.is-hidden {
+  display: none;
 }
