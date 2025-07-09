@@ -12,6 +12,7 @@ import { TranslateService } from '../services/translate.service';
 import { SettingsDialogComponent } from '../shared/settings-dialog/settings-dialog.component';
 import { SideNavPanel, SideNavState } from '../common/utility';
 
+import { ExplorerComponent } from './explorer/explorer.component';
 import { FileAttachmentComponent } from './file-attachment/file-attachment.component';
 
 
@@ -24,6 +25,7 @@ import { FileAttachmentComponent } from './file-attachment/file-attachment.compo
     MatIconModule,
     MatMenuModule,
     MatTooltipModule,
+    ExplorerComponent,
     FileAttachmentComponent
   ],
   templateUrl: './project-page.component.html',

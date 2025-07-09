@@ -14,5 +14,9 @@
   },
   "fileAttachmentComponent": {
     "uploadFileButton": "Upload file"
+  },
+  "explorerComponent": {
+    "expandAll": "Expand folders in explorer",
+    "collapseAll": "Collapse folders in explorer"
   }
 }

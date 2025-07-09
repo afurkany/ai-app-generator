@@ -1,0 +1,61 @@
+<!-- Root Folder Node -->
+<div *ngIf="node.type === 'folder'">
+  <button mat-button class="root-folder" (click)="toggle()" *ngIf="node.name === rootFolderName">
+    <div class="content">
+      <!-- to add indent -->
+      <ng-container *ngFor="let _ of [].constructor(node.level)">
+        <span class="indent-marker"></span>
+      </ng-container>
+
+      <mat-icon>{{ expanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }}</mat-icon>
+      <p>{{ node.name }}</p>
+    </div>
+  </button>
+  
+  <!-- TODO: Expand / Collapse all buttons to be added -->
+  <!-- <div>
+    <button mat-icon-button
+      matTooltipPosition="below"
+      [matTooltip]="translateService.get('explorerComponent.expandAll')"
+      (click)="onExpandTree()"
+    >
+      <mat-icon>expand_more</mat-icon>
+    </button>
+  </div> -->
+</div>
+
+<!-- Folder Node -->
+<div *ngIf="node.type === 'folder'">
+  <button mat-button class="folder" (click)="toggle()" *ngIf="node.name !== rootFolderName">
+    <div class="content">
+      <!-- to add indent -->
+      <ng-container *ngFor="let _ of [].constructor(node.level)">
+        <span class="indent-marker"></span>
+      </ng-container>
+
+      <mat-icon>{{ expanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }}</mat-icon>
+      <p>{{ node.name }}</p>
+    </div>
+  </button>
+
+  <div class="children" *ngIf="expanded">
+    <app-explorer-node *ngFor="let child of node.children" [node]="child"></app-explorer-node>
+  </div>
+</div>
+
+<!-- File Node -->
+<div *ngIf="node.type === 'file'">
+  <button mat-button class="folder">
+    <div class="content">
+      <!-- to add indent -->
+      <ng-container *ngFor="let _ of [].constructor(node.level)">
+        <span class="indent-marker"></span>
+      </ng-container>
+
+      <div class="file-container">
+        <mat-icon class="file-icon">insert_drive_file</mat-icon>
+        <p>{{ node.name }}</p>
+      </div>
+    </div>
+  </button>
+</div>
