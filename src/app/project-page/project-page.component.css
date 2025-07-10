@@ -48,9 +48,12 @@
 
 .sideNavExplorer {
 	display: flex;
+	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	background-color: pink;
+	background-color: azure;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .sideNavAttachedFiles {

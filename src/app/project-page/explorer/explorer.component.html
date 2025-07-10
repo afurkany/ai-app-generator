@@ -1,0 +1,35 @@
+<div class="main-project-container">
+  <h3>Main Project Folder</h3>
+  <button mat-icon-button 
+    matTooltipPosition="below"
+    [matTooltip]="translateService.get('explorerComponent.goToFolder')"
+    (click)="onGoToMainProjectFolder()"
+  >
+    <mat-icon>launch</mat-icon>
+  </button>
+
+  <button mat-icon-button 
+    matTooltipPosition="below"
+    [matTooltip]="translateService.get('explorerComponent.syncProjectFolder')"
+    (click)="syncProjectFolder()"
+  >
+    <mat-icon>sync</mat-icon>
+  </button>
+</div>
+
+<app-explorer-node *ngIf="tree" [node]="tree" [rootFolderName]="rootFolderName"></app-explorer-node>
+
+<hr />
+
+<div class="test-project-container">
+  <h3>Test Project Folder</h3>
+  <button mat-icon-button 
+    matTooltipPosition="below"
+    [matTooltip]="translateService.get('explorerComponent.goToFolder')"
+    (click)="onGoToTestProjectFolder()"
+  >
+    <mat-icon>launch</mat-icon>
+  </button>
+  <mat-icon [matTooltip]="translateService.get('explorerComponent.testProjectFolderTooltip')">information</mat-icon>
+</div>
+<app-explorer-node *ngIf="tree" [node]="tree" [rootFolderName]="rootFolderName"></app-explorer-node>

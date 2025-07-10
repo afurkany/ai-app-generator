@@ -21,6 +21,7 @@ import { ProjectInfo } from '../common/utility';
 import { TranslateService } from '../services/translate.service';
 import { ApiService } from '../services/api.service';
 import { Router } from '@angular/router';
+import { SetupService } from '../services/setup.service';
 
 
 @Component({
@@ -53,6 +54,7 @@ export class HomePageComponent implements OnInit{
   constructor(
     private router: Router,
     private apiService: ApiService,
+    private setupService: SetupService,
     public translateService: TranslateService,
   ) {}
 
@@ -118,8 +120,10 @@ export class HomePageComponent implements OnInit{
     });
   }
 
-  directToProject(projectName: string) {
+  directToProject(projectName: string, projectPath: string) {
     console.log("projectName: ", projectName);
+    this.setupService.activeProjectPath = projectPath;
+    console.log("this.setupService.activeProjectFolder: ", this.setupService.activeProjectPath);
     this.router.navigate(['/project']);
   }
 

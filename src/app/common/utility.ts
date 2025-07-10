@@ -22,3 +22,10 @@ export interface File {
   name: string;
   path: string;
 }
+
+export interface TreeNode {
+  name: string;
+  type: 'folder' | 'file';
+  children?: TreeNode[];
+  level?: number;
+}

@@ -12,7 +12,9 @@ import { TranslateService } from '../services/translate.service';
 import { SettingsDialogComponent } from '../shared/settings-dialog/settings-dialog.component';
 import { SideNavPanel, SideNavState } from '../common/utility';
 
+import { ExplorerComponent } from './explorer/explorer.component';
 import { FileAttachmentComponent } from './file-attachment/file-attachment.component';
+import { SetupService } from '../services/setup.service';
 
 
 @Component({
@@ -24,6 +26,7 @@ import { FileAttachmentComponent } from './file-attachment/file-attachment.compo
     MatIconModule,
     MatMenuModule,
     MatTooltipModule,
+    ExplorerComponent,
     FileAttachmentComponent
   ],
   templateUrl: './project-page.component.html',
@@ -39,6 +42,7 @@ export class ProjectPageComponent implements OnInit{
 
   constructor (
     private router: Router,
+    private setupService: SetupService,
     public translateService: TranslateService,
   ) {}
   
@@ -114,6 +118,10 @@ export class ProjectPageComponent implements OnInit{
         const vwUnit = window.innerWidth / 100;
         console.log("vwUnit: ", vwUnit);
         this.sidenavWidth = Math.max(400, Math.min(newWidth, vwUnit * 80));
+        this.setupService.screenWidth = this.sidenavWidth;
+        this.setupService.truncateLength = this.setupService.setTruncateLength(
+          this.setupService.screenWidth
+        );
       }
     };
 

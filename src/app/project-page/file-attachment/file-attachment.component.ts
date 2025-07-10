@@ -30,17 +30,16 @@ import { SetupService } from '../../services/setup.service';
   templateUrl: './file-attachment.component.html',
   styleUrl: './file-attachment.component.css'
 })
-export class FileAttachmentComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FileAttachmentComponent implements OnInit, OnDestroy {
 
   @ViewChild('mainContainer') mainContainerRef!: ElementRef;
   
   isAnyFileUploaded: boolean = false;
   selectedfiles: File[] = [];
-  truncateLength = 50;
 
   constructor (
     public translateService: TranslateService,
-    private setupService: SetupService
+    public setupService: SetupService
   ) {}
 
   ngOnInit(): void {
@@ -48,19 +47,6 @@ export class FileAttachmentComponent implements OnInit, AfterViewInit, OnDestroy
     if (this.selectedfiles.length > 0) {
       this.isAnyFileUploaded = true;
     }
-  }
-
-  ngAfterViewInit() {
-    const el = this.mainContainerRef.nativeElement;
-    const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        const { width, height } = entry.contentRect;
-        console.log("width: ", width);
-        this.truncateLength = this.setTruncateLength(width);
-      }
-    });
-
-    resizeObserver.observe(el);
   }
 
   onClickUploadButton() {
@@ -108,33 +94,6 @@ export class FileAttachmentComponent implements OnInit, AfterViewInit, OnDestroy
       // this.apiService.addProject(this.selectedPath).subscribe((res) => {
       //   this.projectList = [... res];
       // })
-    }
-  }
-
-  private setTruncateLength(width: number) {
-    if (width < 400) {
-      return 20;
-
-    } else if (width < 500) {
-      return 35;
-
-    } else if (width < 600) {
-      return 45;
-
-    } else if (width < 700) {
-      return 55;
-
-    } else if (width < 800) {
-      return 65;
-
-    } else if (width < 900) {
-      return 80;
-
-    } else if (width < 1000) {
-      return 90;
-
-    } else {
-      return 110;
     }
   }
 

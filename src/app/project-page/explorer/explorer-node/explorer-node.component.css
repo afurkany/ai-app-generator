@@ -1,0 +1,43 @@
+.root-folder, .folder {
+  width: 100%;
+  text-align: left;
+  padding: 4px;
+  border: 0;
+  cursor: pointer;
+  background-color: azure;
+}
+
+.root-folder:hover, .folder:hover {
+  background-color: lightblue;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.content p {
+  margin: 0;
+}
+
+.file {
+  margin-left: 20px;
+  padding: 2px 0;
+}
+
+.file-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.file-icon {
+  scale: 0.75;
+  padding-right: 5px;
+}
+
+.file-container p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

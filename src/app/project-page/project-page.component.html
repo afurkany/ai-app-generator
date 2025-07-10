@@ -15,7 +15,7 @@
 				[matTooltip]="translateService.get('projectComponent.explorer')"
 				(click)="onShowExplorer()"
 			>
-				<mat-icon>folder</mat-icon>
+				<mat-icon>folder_open</mat-icon>
 			</button>
 
 			<button mat-icon-button
@@ -65,7 +65,7 @@
 
 	<div class="sideNav" [ngClass]="{ 'is-hidden': !isAnySideNavStateActive }" [style.width.px]="sidenavWidth">
 		<div class="sideNavExplorer" [ngClass]="{ 'is-hidden': sideNavState !== 'explorer' }">
-
+			<app-explorer></app-explorer>
 		</div>
 
 		<div class="sideNavAttachedFiles" [ngClass]="{ 'is-hidden': sideNavState !== 'attachedFiles' }">

@@ -14,5 +14,12 @@
   },
   "fileAttachmentComponent": {
     "uploadFileButton": "Upload file"
+  },
+  "explorerComponent": {
+    "testProjectFolderTooltip": "This folder is used by LLM for isolation from the original project folder.",
+    "goToFolder": "Go to folder",
+    "expandAll": "Expand folders in explorer",
+    "collapseAll": "Collapse folders in explorer",
+    "syncProjectFolder": "Syncronize project folder with the test folder content."
   }
 }
