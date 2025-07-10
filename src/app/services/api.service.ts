@@ -35,4 +35,10 @@ export class ApiService {
   
     return this.http.post<ProjectInfo[]>(`${this.apiUrl}/project`, null, { params });
   }
+
+  getProjectTree(file_path: string): Observable<ProjectInfo[]> {
+    let params = new HttpParams().set("file_path", file_path)
+  
+    return this.http.get<ProjectInfo[]>(`${this.apiUrl}/project/tree`, { params });
+  }
 }

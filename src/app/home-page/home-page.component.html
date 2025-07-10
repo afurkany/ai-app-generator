@@ -47,7 +47,7 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" xPosition="after">
-            <button mat-menu-item (click)="directToProject(project.name)">
+            <button mat-menu-item (click)="directToProject(project.name, project.path)">
               <mat-icon>edit</mat-icon>
               <span>Edit Project</span>
             </button>

@@ -2,10 +2,17 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChi
 import { CommonModule } from '@angular/common';
 
 import { TreeNode } from '../../common/utility';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { ExplorerNodeComponent } from './explorer-node/explorer-node.component';
+import { TranslateService } from '../../services/translate.service';
+
+import { openPath } from '@tauri-apps/plugin-opener';
+import { SetupService } from '../../services/setup.service';
+import { ApiService } from '../../services/api.service';
 
 
 @Component({
@@ -13,14 +20,22 @@ import { ExplorerNodeComponent } from './explorer-node/explorer-node.component';
   standalone: true,
   imports: [
     CommonModule,
+    MatButtonModule,
     MatCardModule,
     MatIconModule,
+    MatTooltipModule,
     ExplorerNodeComponent,
   ],
   templateUrl: './explorer.component.html',
   styleUrl: './explorer.component.css'
 })
 export class ExplorerComponent implements OnInit {
+
+  constructor (
+    private setupService: SetupService,
+    private apiService: ApiService,
+    public translateService: TranslateService
+  ) {}
 
   rootFolderName = 'beverages';
   rawData: any = {
@@ -49,7 +64,11 @@ export class ExplorerComponent implements OnInit {
   tree: TreeNode | null = null;
 
   ngOnInit() {
-    this.tree = this.buildTree(this.rawData, this.rootFolderName, 0);
+    this.apiService.getProjectTree(this.setupService.activeProjectPath).subscribe((response) => {
+      console.log("response: ", response);
+      const folderName = this.setupService.activeProjectPath.split("\\").at(-1) ?? ""
+      this.tree = this.buildTree(response, folderName, 0);
+    })
   }
 
   buildTree(data: any, folderName: string, level: number): TreeNode {
@@ -73,5 +92,25 @@ export class ExplorerComponent implements OnInit {
 
     console.log("node: ", node);
     return node;
+  }
+
+  syncProjectFolder() {
+    throw new Error('Method not implemented.');
+  }
+
+  async onGoToMainProjectFolder(): Promise<void> {
+    try {
+      await openPath(this.setupService.activeProjectPath);
+    } catch (error) {
+      console.error('Error opening folder:', error);
+    }
+  }
+
+  async onGoToTestProjectFolder(): Promise<void> {
+    try {
+      await openPath(this.setupService.activeProjectPath);
+    } catch (error) {
+      console.error('Error opening folder:', error);
+    }
   }
 }

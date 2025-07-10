@@ -6,6 +6,8 @@ import { MatTooltip } from '@angular/material/tooltip';
 
 import { TreeNode } from '../../../common/utility';
 import { TranslateService } from '../../../services/translate.service';
+import { EndEllipsisPipe } from '../../../common/endEllipsisPipe';
+import { SetupService } from '../../../services/setup.service';
 
 
 @Component({
@@ -15,6 +17,7 @@ import { TranslateService } from '../../../services/translate.service';
     CommonModule,
     MatIconModule,
     MatTooltip,
+    EndEllipsisPipe,
   ],
   templateUrl: './explorer-node.component.html',
   styleUrl: './explorer-node.component.css'
@@ -24,7 +27,10 @@ export class ExplorerNodeComponent {
   @Input() rootFolderName!: string;
   expanded = false;
 
-  constructor (public translateService: TranslateService) {} 
+  constructor (
+    public setupService: SetupService,
+    public translateService: TranslateService,
+  ) {} 
 
   toggle() {
     this.expanded = !this.expanded;

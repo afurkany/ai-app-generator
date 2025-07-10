@@ -17,7 +17,7 @@
 			<mat-card class="fileCard" appearance="outlined">
 				<mat-card-actions>
 					<div class="tooltipDiv" [matTooltip]="file.name">
-						<p>{{ file.name | endEllipsis:truncateLength }}</p>
+						<p>{{ file.name | endEllipsis:setupService.truncateLength }}</p>
 					</div>
 					<div>
 						<button mat-icon-button [matMenuTriggerFor]="removeSingle">

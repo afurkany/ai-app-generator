@@ -36,3 +36,8 @@
   scale: 0.75;
   padding-right: 5px;
 }
+
+.file-container p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
