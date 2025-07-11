@@ -43,7 +43,7 @@
   cursor: ew-resize;
 	user-select: none;
 	flex-shrink: 0;
-  background-color: #00ffff;
+  background-color: #d1d1d1;
 }
 
 .sideNavExplorer {
@@ -51,7 +51,7 @@
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	background-color: azure;
+	background-color: #f9f9f9;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
@@ -61,7 +61,7 @@
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	background-color: azure;
+	background-color: #f9f9f9;
 }
 
 .sideNavSearch {
@@ -87,9 +87,10 @@
 
 .chatArea {
 	display: flex;
-	flex: 1;
+	flex: 1;  /* necessary for chat component to be able to float when slider moves*/
+	flex-direction: column;
 	height: 100%;
-	background-color: blue;
+	background-color: #ffffff;
 }
 
 .is-hidden {

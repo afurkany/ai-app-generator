@@ -18,7 +18,7 @@
   padding: 4px 8px;
   border: 1px solid #2c2c2c;
   border-radius: 6px;
-  background-color: #C4E1E6;
+  background-color: #f1f1f1;
 }
 
 .card-header {
@@ -84,7 +84,7 @@
 }
 
 .appTitle, .noProjectInfo {
-  color: #254d70;
+  color: #a1a1a1;
 }
 
 .noProjectInfo {

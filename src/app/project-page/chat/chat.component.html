@@ -1,0 +1,70 @@
+<div class="main-container">
+  <mat-tab-group animationDuration="0ms">
+
+    <mat-tab label="Chat">
+      <!-- horizontal line after tab -->
+      <hr />
+      
+      <div class="chat-container">
+        <!-- model selection -->
+        <mat-form-field class="model-selection-dropdown">
+          <mat-label>Model Selection</mat-label>
+          <mat-select [(ngModel)]="selectedValue" name="model">
+            @for (model of models; track model) {
+              <mat-option [value]="model.value">{{model.key}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <div class="chat-content-div">
+          <div *ngFor="let chat of chatHistory">
+            <div class="messageWrapper" [ngClass]="chat.role === 'user' ? 'userAlign' : 'assistantAlign'">
+              <div class="messageBubble" [ngClass]="chat.role === 'user' ? 'userMessage' : 'assistantMessage'">
+                {{ chat.message }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- chat input field -->
+        <div class="chat-input-container">
+          <mat-form-field appearance="outline" class="chatFormField">
+            <mat-label>Ask me about your application.</mat-label>
+            <textarea matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="6"
+              class="textArea"
+            ></textarea>
+            <button mat-icon-button class="sendIconButton">
+              <mat-icon>send</mat-icon>
+            </button>
+          </mat-form-field>
+          <p>App generator model can make mistakes. Please check the outputs of the model.</p>
+        </div>
+      </div>
+    </mat-tab>
+
+    <div *ngFor="let tab of tabs">
+      <mat-tab label="{{ tab }}">
+        <!-- horizontal line after tab -->
+        <hr />
+        
+        <!-- file path -->
+        <div class="filePathContainer">
+          <p class="filePathText">File path to be written</p>
+        </div>
+
+        <div class="fileContentContainer">
+          <div class="numberColumn">
+            <div *ngFor="let i of range(highlightedLines.length); let idx = index">
+              {{ idx + 1 }}
+            </div>
+          </div>
+          <pre class="contentColumn"><code [innerHTML]="codeContent"></code></pre>
+        </div>
+      </mat-tab>
+    </div>
+
+  </mat-tab-group>
+</div>
