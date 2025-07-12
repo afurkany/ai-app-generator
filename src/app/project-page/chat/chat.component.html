@@ -1,5 +1,5 @@
 <div class="main-container">
-  <mat-tab-group animationDuration="0ms">
+  <mat-tab-group animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
 
     <mat-tab label="Chat">
       <!-- horizontal line after tab -->
@@ -16,11 +16,11 @@
           </mat-select>
         </mat-form-field>
 
-        <div class="chat-content-div">
+        <div class="chat-content-div" #chatContentDiv (scroll)="onChatContentScroll()">
           <div *ngFor="let chat of chatHistory">
             <div class="messageWrapper" [ngClass]="chat.role === 'user' ? 'userAlign' : 'assistantAlign'">
               <div class="messageBubble" [ngClass]="chat.role === 'user' ? 'userMessage' : 'assistantMessage'">
-                {{ chat.message }}
+                <pre>{{ chat.message }}</pre>
               </div>
             </div>
           </div>
@@ -28,6 +28,15 @@
 
         <!-- chat input field -->
         <div class="chat-input-container">
+          <!-- scroll below button -->
+          <button mat-icon-button *ngIf="isDisplayScrollBottomButton"
+            class="scrollBottomButton"
+            [matTooltip]="translateService.get('chatComponent.scrollBottomButton')"
+            (click)="onScrollBelowButtonClick()">
+            <mat-icon>arrow_downward</mat-icon>
+          </button>
+
+          <!-- text area -->
           <mat-form-field appearance="outline" class="chatFormField">
             <mat-label>Ask me about your application.</mat-label>
             <textarea matInput
@@ -35,12 +44,17 @@
               cdkAutosizeMinRows="1"
               cdkAutosizeMaxRows="6"
               class="textArea"
+              [(ngModel)]="userMessage.message"
+              (keydown.enter)="onEnterPressed($event)"
             ></textarea>
-            <button mat-icon-button class="sendIconButton">
+            <button mat-icon-button
+              class="sendIconButton"
+              (click)="onSendMessageClick()"
+            >
               <mat-icon>send</mat-icon>
             </button>
           </mat-form-field>
-          <p>App generator model can make mistakes. Please check the outputs of the model.</p>
+          <p class="noteText">App generator model can make mistakes. Please check the outputs of the model.</p>
         </div>
       </div>
     </mat-tab>

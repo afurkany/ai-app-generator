@@ -10,7 +10,7 @@
 			</button>
 		</mat-menu>
 	</div>
-	<h2 class="fileNotAvailableNote" *ngIf="!isAnyFileUploaded">There is no file uploaded yet.</h2>
+	<p class="fileNotAvailableNote" *ngIf="!isAnyFileUploaded">There is no file uploaded yet.</p>
 
 	<div class="fileNameCardContainer" *ngIf="isAnyFileUploaded">
 		<div class="fileNameCard" *ngFor="let file of selectedfiles">

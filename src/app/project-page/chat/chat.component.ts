@@ -17,6 +17,7 @@ import { ModelTypeSelection, ChatMessage } from '../../common/utility';
 
 import hljs from 'highlight.js/lib/core';
 import python from 'highlight.js/lib/languages/python';
+import { TranslateService } from '../../services/translate.service';
 hljs.registerLanguage('python', python);
 
 
@@ -52,190 +53,12 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   codeContent: SafeHtml = '';
   highlightedLines: string[] = [];
+  scrollAtBottomPosition = 0;
+  isDisplayScrollBottomButton: boolean = false;
+
+  userMessage: ChatMessage = { role: 'user', message: '' };
   chatHistory: ChatMessage[] = [
     {
-      role: 'user',
-      message: 'Hello, can you help me for an issue?'
-    },
-    {
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
-    },
-    {
-      role: 'user',
-      message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      role: 'assistant',
-      message: `
-      It is a simple command.
-      You can use "ng g c <component_name>" in the terminal.
-      `
-    },
-    {
-      role: 'user',
-      message: 'Hello, can you help me for an issue?'
-    },
-    {
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
-    },
-    {
-      role: 'user',
-      message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      role: 'assistant',
-      message: `
-      It is a simple command.
-      You can use "ng g c <component_name>" in the terminal.
-      `
-    },
-    {
-      role: 'user',
-      message: 'Hello, can you help me for an issue?'
-    },
-    {
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
-    },
-    {
-      role: 'user',
-      message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      role: 'assistant',
-      message: `
-      It is a simple command.
-      You can use "ng g c <component_name>" in the terminal.
-      `
-    },
-    {
-      role: 'user',
-      message: 'Hello, can you help me for an issue?'
-    },
-    {
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
-    },
-    {
-      role: 'user',
-      message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      role: 'assistant',
-      message: `
-      It is a simple command.
-      You can use "ng g c <component_name>" in the terminal.
-      `
-    },
-    {
-      role: 'user',
-      message: 'Hello, can you help me for an issue?'
-    },
-    {
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
-    },
-    {
-      role: 'user',
-      message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      role: 'assistant',
-      message: `
-      It is a simple command.
-      You can use "ng g c <component_name>" in the terminal.
-      `
-    },
-    {
-      role: 'user',
-      message: 'Hello, can you help me for an issue?'
-    },
-    {
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
-    },
-    {
-      role: 'user',
-      message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      role: 'assistant',
-      message: `
-      It is a simple command.
-      You can use "ng g c <component_name>" in the terminal.
-      `
-    },
-    {
-      role: 'user',
-      message: 'Hello, can you help me for an issue?'
-    },
-    {
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
-    },
-    {
-      role: 'user',
-      message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
       role: 'assistant',
       message: `
       It is a simple command.
@@ -249,74 +72,20 @@ export class ChatComponent implements OnInit, AfterViewInit {
     {
       role: 'user',
       message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      role: 'assistant',
-      message: `
-      It is a simple command.
-      You can use "ng g c <component_name>" in the terminal.
-      `
-    },
-    {
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
-    },
-    {
-      role: 'user',
-      message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      role: 'assistant',
-      message: `
-      It is a simple command.
-      You can use "ng g c <component_name>" in the terminal.
-      `
-    },
-    {
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
-    },
-    {
-      role: 'user',
-      message: 'I have a problem with Angular application.'
-    },
-    {
-      role: 'user',
-      message: 'I cannot create a component. How should I do it?'
-    },
-    {
-      role: 'assistant',
-      message: 'It is a simple command. You can use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      role: 'assistant',
-      message: `
-      Hey there!!!
-      `
-    },
+    }
   ];
 
+  @ViewChild('chatContentDiv') private chatContentDiv!: ElementRef<HTMLDivElement>;
   @ViewChild('codeBlock') codeBlock!: ElementRef;
 
-  constructor () {}
+  constructor (
+    public translateService: TranslateService,
+  ) {}
 
   ngOnInit() {
+    // THE BELOW LINE TO BE DELETED LATER
+    this.chatHistory = Array(10).fill(this.chatHistory).flat();
+
     fetch('assets/scripts/trial_script.py')
       .then(res => res.text())
       .then(data => {
@@ -328,9 +97,64 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     hljs.highlightAll();
+    this.scrollToBottom();
+  }
+
+  onTabChange(event: any) {
+    if (event.index === 0) {
+      this.scrollToBottom();
+    }
+  }
+
+  onSendMessageClick() {
+    const userMessage = { ...this.userMessage };
+
+    // check if message content is empty
+    if (!userMessage.message.trim()) {
+      this.userMessage.message = '';
+      return
+    }
+
+    this.chatHistory.push(userMessage);
+    this.userMessage.message = '';
+    this.scrollToBottom();
+  }
+
+  onEnterPressed(event: any): void {
+    // Use shift + enter for wew line
+    if (event.shiftKey) {
+      this.scrollToBottom();
+      return;
+    }
+
+    event.preventDefault();
+    this.onSendMessageClick();
+  }
+
+  onScrollBelowButtonClick() {
+    this.scrollToBottom();
+  }
+
+  onChatContentScroll() {
+    // Check if scroll is at the bottom. Otherwise, show scroll bottom button.
+    const el = this.chatContentDiv.nativeElement;
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 5;
+
+    if (atBottom) {
+      this.isDisplayScrollBottomButton = false;
+    } else {
+      this.isDisplayScrollBottomButton = true;
+    }
   }
 
   range(n: number): number[] {
     return Array.from({ length: n }, (_, i) => i + 1);
+  }
+
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      const el = this.chatContentDiv.nativeElement;
+      el.scrollTop = el.scrollHeight;
+    }, 100);
   }
 }

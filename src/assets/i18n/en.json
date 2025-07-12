@@ -21,5 +21,8 @@
     "expandAll": "Expand folders in explorer",
     "collapseAll": "Collapse folders in explorer",
     "syncProjectFolder": "Syncronize project folder with the test folder content."
+  },
+  "chatComponent": {
+    "scrollBottomButton": "Scroll to bottom"
   }
 }

@@ -9,13 +9,14 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: 94vh;
+  height: 95vh;
 }
 
 .model-selection-dropdown {
   max-width: 20%;
   margin-left: 40px;
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .chat-content-div {
@@ -54,8 +55,39 @@
   margin-bottom: 10px;
 }
 
+/* CHANGE TEXT AREA BORDER COLOR AND FLOAT LABEL COLOR CHANGE ON PRESS_START */
+:host ::ng-deep .mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__leading {
+  border-color: #a1a1a1 !important;
+}
+
+:host ::ng-deep .mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__notch {
+  border-color: #a1a1a1 !important;
+}
+
+:host ::ng-deep .mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #a1a1a1 !important;
+}
+
+:host ::ng-deep .mdc-floating-label--float-above {
+  color: #a1a1a1 !important;
+}
+/* CHANGE TEXT AREA BORDER COLOR AND FLOAT LABEL COLOR CHANGE ON PRESS_END */
+
+.scrollBottomButton {
+  position: fixed;
+  bottom: 16%;
+  background-color: #f1f1f1;
+}
+
 .chatFormField {
   width: 100%;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .messageWrapper {
@@ -70,6 +102,13 @@
   max-width: 60%;
 }
 
+pre {
+  text-align: left;
+  font-family: inherit;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
 .userAlign {
   justify-content: flex-end;
 }
@@ -81,6 +120,7 @@
 .userMessage {
   /* background-color: #f1f0f0; */
   color: black;
+  padding: 0;
   margin-right: 20px;
   text-align: start;
 }
@@ -96,6 +136,95 @@
   resize: none;
   overflow-y: auto;
 }
+
+/* TAB TEXT AND UNDERLINE COLOR UPDATE_START */
+/* UNSELECTED TEXT COLOR */
+:host ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  color: #a1a1a1;
+}
+
+/* SELECTED TEXT COLOR */
+:host ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #5c5c5c !important;
+}
+
+/* SELECTED UNDERLINE COLOR */
+:host ::ng-deep .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-color: #5c5c5c !important;
+}
+/* SELECTED TAB TEXT AND UNDERLINE COLOR UPDATE_END */
+
+/* CHAT TAB DYNAMIC MEDIA UPDATE START */
+@media (max-height: 1000px) {
+  .chat-container {
+    height: 94vh;
+  }
+
+  .scrollBottomButton {
+    bottom: 16%;
+  }
+}
+
+@media (max-height: 800px) {
+  .chat-container {
+    height: 93vh;
+  }
+
+  .scrollBottomButton {
+    bottom: 22%;
+  }
+}
+
+@media (max-height: 700px) {
+  .chat-container {
+    height: 91vh;
+  }
+
+  .scrollBottomButton {
+    bottom: 26%;
+  }
+}
+
+@media (max-height: 600px) {
+  .chat-container {
+    height: 90vh;
+  }
+
+  .scrollBottomButton {
+    bottom: 30%;
+  }
+}
+
+@media (max-height: 500px) {
+  .chat-container {
+    height: 89vh;
+  }
+
+  .scrollBottomButton {
+    bottom: 32%;
+  }
+}
+
+@media (max-height: 450px) {
+  .chat-container {
+    height: 87vh;
+  }
+
+  .scrollBottomButton {
+    bottom: 35%;
+  }
+}
+
+@media (max-height: 400px) {
+  .chat-container {
+    height: 86vh;
+  }
+
+  .scrollBottomButton {
+    bottom: 35%;
+  }
+}
+/* CHAT TAB DYNAMIC MEDIA UPDATE END */
 /* CHAT-TAB END */
 
 /* FILE-TAB START */
