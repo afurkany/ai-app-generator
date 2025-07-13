@@ -36,6 +36,7 @@ export interface ModelTypeSelection {
 }
 
 export interface ChatMessage {
+  id: number,
   role: 'user' | 'assistant';
   message: string;
 }

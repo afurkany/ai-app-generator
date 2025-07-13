@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TextFieldModule } from '@angular/cdk/text-field';
@@ -12,8 +12,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ModelTypeSelection, ChatMessage } from '../../common/utility';
+import { RemoveChatHistoryDialogComponent } from '../../shared/remove-chat-history-dialog/remove-chat-history-dialog.component';
+import { CopyMessageSnackbarComponent } from '../../shared/copy-message-snackbar/copy-message-snackbar.component';
 
 import hljs from 'highlight.js/lib/core';
 import python from 'highlight.js/lib/languages/python';
@@ -56,9 +60,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
   scrollAtBottomPosition = 0;
   isDisplayScrollBottomButton: boolean = false;
 
-  userMessage: ChatMessage = { role: 'user', message: '' };
+  userMessage: ChatMessage = { id: -1, role: 'user', message: '' };
+  chatWelcomeMessage: string = '';
   chatHistory: ChatMessage[] = [
     {
+      id: 1,
       role: 'assistant',
       message: `
       It is a simple command.
@@ -66,10 +72,12 @@ export class ChatComponent implements OnInit, AfterViewInit {
       `
     },
     {
+      id: 2,
       role: 'assistant',
       message: 'Yes, sure. How can I help you?'
     },
     {
+      id: 3,
       role: 'user',
       message: 'I have a problem with Angular application.'
     }
@@ -77,6 +85,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   @ViewChild('chatContentDiv') private chatContentDiv!: ElementRef<HTMLDivElement>;
   @ViewChild('codeBlock') codeBlock!: ElementRef;
+  
+  readonly dialog = inject(MatDialog);
+
+  private _snackBar = inject(MatSnackBar);
+  durationInSeconds = 1.5;
 
   constructor (
     public translateService: TranslateService,
@@ -84,8 +97,10 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // THE BELOW LINE TO BE DELETED LATER
-    this.chatHistory = Array(10).fill(this.chatHistory).flat();
+    // this.chatHistory = Array(10).fill(this.chatHistory).flat();
+    // this.chatHistory = [];
 
+    this.chatWelcomeMessage = this.getWelcomeMessage();
     fetch('assets/scripts/trial_script.py')
       .then(res => res.text())
       .then(data => {
@@ -107,7 +122,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   onSendMessageClick() {
-    const userMessage = { ...this.userMessage };
+    let userMessage = { ...this.userMessage };
 
     // check if message content is empty
     if (!userMessage.message.trim()) {
@@ -115,6 +130,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
       return
     }
 
+    userMessage.id = this.chatHistory.length + 1;
     this.chatHistory.push(userMessage);
     this.userMessage.message = '';
     this.scrollToBottom();
@@ -147,6 +163,36 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
   }
 
+  onRemoveChatHistoryDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    const dialogRef = this.dialog.open(RemoveChatHistoryDialogComponent, {
+      width: '250px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.chatHistory = [];
+      }
+    });
+  }
+
+  onCopyUserMessage(message: string) {
+    navigator.clipboard.writeText(message)
+    .then(() => {
+      this._snackBar.openFromComponent(CopyMessageSnackbarComponent, {
+        duration: this.durationInSeconds * 1000,
+      });
+    })
+    .catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  }
+
+  onEditUserMessage(id: number) {
+    console.log("id: ", id);
+  }
+
   range(n: number): number[] {
     return Array.from({ length: n }, (_, i) => i + 1);
   }
@@ -156,5 +202,16 @@ export class ChatComponent implements OnInit, AfterViewInit {
       const el = this.chatContentDiv.nativeElement;
       el.scrollTop = el.scrollHeight;
     }, 100);
+  }
+
+  private getWelcomeMessage(): string {
+    let messageList = [
+      "Hello, nice to see you! Let's develop our app!",
+      "What's on your mind today? Let me help you!",
+      "Hey, are you ready to develop?",
+      "Hey yo, I was waiting for you! Let's dive in our app!"
+    ];
+    let random = messageList.sort(() => 0.5 - Math.random())[0];
+    return random
   }
 }

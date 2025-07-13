@@ -5,22 +5,53 @@
       <!-- horizontal line after tab -->
       <hr />
       
-      <div class="chat-container">
-        <!-- model selection -->
-        <mat-form-field class="model-selection-dropdown">
-          <mat-label>Model Selection</mat-label>
-          <mat-select [(ngModel)]="selectedValue" name="model">
-            @for (model of models; track model) {
-              <mat-option [value]="model.value">{{model.key}}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+      <div class="chat-container">      
+        <div class="settingsContainer">
+          <!-- model selection dropdown -->
+          <mat-form-field class="model-selection-dropdown">
+            <mat-label>Model Selection</mat-label>
+            <mat-select [(ngModel)]="selectedValue" name="model">
+              @for (model of models; track model) {
+                <mat-option [value]="model.value">{{model.key}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
 
-        <div class="chat-content-div" #chatContentDiv (scroll)="onChatContentScroll()">
+          <!-- overflow for chat settings -->
+          <button mat-icon-button [matMenuTriggerFor]="removeSingle">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #removeSingle="matMenu">
+            <button mat-menu-item (click)="onRemoveChatHistoryDialog('0ms', '0ms')">
+              <span>Clear chat history</span>
+            </button>
+          </mat-menu>
+        </div>
+
+        <div class="emptyChatWelcomeContainer" *ngIf="chatHistory.length === 0">
+          <h1>
+            {{ chatWelcomeMessage }}
+          </h1>
+        </div>
+
+        <div class="chat-content-div" #chatContentDiv (scroll)="onChatContentScroll()" *ngIf="chatHistory.length > 0">
           <div *ngFor="let chat of chatHistory">
             <div class="messageWrapper" [ngClass]="chat.role === 'user' ? 'userAlign' : 'assistantAlign'">
               <div class="messageBubble" [ngClass]="chat.role === 'user' ? 'userMessage' : 'assistantMessage'">
                 <pre>{{ chat.message }}</pre>
+                <div *ngIf="chat.role === 'user'">
+                  <button mat-icon-button [matMenuTriggerFor]="removeSingle">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #removeSingle="matMenu">
+                    <button mat-menu-item (click)="onCopyUserMessage(chat.message)">
+                      <span>Copy</span>
+                    </button>
+                    <button mat-menu-item (click)="onEditUserMessage(chat.id)">
+                      <span>Edit</span>
+                    </button>
+                  </mat-menu>
+                </div>
               </div>
             </div>
           </div>

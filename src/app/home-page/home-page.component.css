@@ -100,24 +100,6 @@ mat-form-field.searchInput {
   height: 56px;
 }
 
-/* CHANGE TEXT AREA BORDER COLOR AND FLOAT LABEL COLOR CHANGE ON PRESS_START */
-:host ::ng-deep .mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__leading {
-  border-color: #a1a1a1 !important;
-}
-
-:host ::ng-deep .mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__notch {
-  border-color: #a1a1a1 !important;
-}
-
-:host ::ng-deep .mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__trailing {
-  border-color: #a1a1a1 !important;
-}
-
-:host ::ng-deep .mdc-floating-label--float-above {
-  color: #a1a1a1 !important;
-}
-/* CHANGE TEXT AREA BORDER COLOR AND FLOAT LABEL COLOR CHANGE ON PRESS_END */
-
 /* CHAT TAB DYNAMIC MEDIA UPDATE_START */
 @media (min-width: 0px) and (max-width: 375px) {
   .container {
