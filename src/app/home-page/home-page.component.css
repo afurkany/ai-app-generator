@@ -6,8 +6,8 @@
 
 .container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns */
-  gap: 16px; /* space between items */
+  grid-template-columns: repeat(8, 1fr); /* 8 columns - default setting. Check below for media settings. */
+  gap: 16px;
   margin-top: 20px;
 }
 
@@ -18,7 +18,7 @@
   padding: 4px 8px;
   border: 1px solid #2c2c2c;
   border-radius: 6px;
-  background-color: #C4E1E6;
+  background-color: #f1f1f1;
 }
 
 .card-header {
@@ -28,7 +28,7 @@
 }
 
 .addProjectIcon, .removeAllProjectsIcon {
-  color: #254d70;
+  color: #5c5c5c;
 }
 
 .left {
@@ -63,10 +63,6 @@
   margin: 4px;
 }
 
-.right button:hover {
-  background-color: rgba(0, 213, 255, 0.1);
-}
-
 .searchBar {
   display: flex;
   flex: 1;
@@ -84,11 +80,15 @@
 }
 
 .appTitle, .noProjectInfo {
-  color: #254d70;
+  color: #5c5c5c;
 }
 
 .noProjectInfo {
   font-weight: 400;
+}
+
+.moreVertButton:hover {
+  background-color: #e1e1e1 !important;
 }
 
 hr {
@@ -99,3 +99,47 @@ hr {
 mat-form-field.searchInput {
   height: 56px;
 }
+
+/* CHAT TAB DYNAMIC MEDIA UPDATE_START */
+@media (min-width: 0px) and (max-width: 375px) {
+  .container {
+    grid-template-columns: repeat(1, 1fr); /* 1 columns */
+  }
+}
+
+@media (min-width: 376px) and (max-width: 600px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1200px) {
+  .container {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1500px) {
+  .container {
+    grid-template-columns: repeat(5, 1fr); /* 5 columns */
+  }
+}
+
+@media (min-width: 1501px) and (max-width: 1900px) {
+  .container {
+    grid-template-columns: repeat(6, 1fr); /* 6 columns */
+  }
+}
+
+@media (min-width: 1901px) and (max-width: 2500px) {
+  .container {
+    grid-template-columns: repeat(7, 1fr); /* 6 columns */
+  }
+}
+/* CHAT TAB DYNAMIC MEDIA UPDATE_END */

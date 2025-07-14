@@ -65,7 +65,6 @@ export class ExplorerComponent implements OnInit {
 
   ngOnInit() {
     this.apiService.getProjectTree(this.setupService.activeProjectPath).subscribe((response) => {
-      console.log("response: ", response);
       const folderName = this.setupService.activeProjectPath.split("\\").at(-1) ?? ""
       this.tree = this.buildTree(response, folderName, 0);
     })
@@ -89,8 +88,6 @@ export class ExplorerComponent implements OnInit {
     info.child_file.forEach((file: string) => {
       node.children!.push({ name: file, type: 'file', level: level+1 });
     });
-
-    console.log("node: ", node);
     return node;
   }
 

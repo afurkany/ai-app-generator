@@ -14,8 +14,9 @@ import { SideNavPanel, SideNavState } from '../common/utility';
 
 import { ExplorerComponent } from './explorer/explorer.component';
 import { FileAttachmentComponent } from './file-attachment/file-attachment.component';
-import { SetupService } from '../services/setup.service';
+import { ChatComponent } from './chat/chat.component';
 
+import { SetupService } from '../services/setup.service';
 
 @Component({
   selector: 'app-project-page',
@@ -27,7 +28,8 @@ import { SetupService } from '../services/setup.service';
     MatMenuModule,
     MatTooltipModule,
     ExplorerComponent,
-    FileAttachmentComponent
+    FileAttachmentComponent,
+    ChatComponent,
   ],
   templateUrl: './project-page.component.html',
   styleUrl: './project-page.component.css'
@@ -114,10 +116,13 @@ export class ProjectPageComponent implements OnInit{
     const onMouseMove = (e: MouseEvent) => {
       if (this.isResizing) {
         const newWidth = e.clientX - this.xOffset;
+        
         // clamp min/max values
         const vwUnit = window.innerWidth / 100;
         console.log("vwUnit: ", vwUnit);
         this.sidenavWidth = Math.max(400, Math.min(newWidth, vwUnit * 80));
+        
+        // set width in setupService
         this.setupService.screenWidth = this.sidenavWidth;
         this.setupService.truncateLength = this.setupService.setTruncateLength(
           this.setupService.screenWidth

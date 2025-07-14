@@ -1,0 +1,24 @@
+/* 
+NOTE:
+Dialog width and height set in chat.component.ts under onEditUserMessage()
+*/
+
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+mat-dialog-content {
+  flex: 1 1 auto;
+}
+
+mat-form-field {
+  width: 100%;
+  height: 100%;
+}
+
+text-area {
+  width: 100%;
+  height: 100%;
+}

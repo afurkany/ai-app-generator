@@ -29,3 +29,14 @@ export interface TreeNode {
   children?: TreeNode[];
   level?: number;
 }
+
+export interface ModelTypeSelection {
+  key: string;
+  value: string;
+}
+
+export interface ChatMessage {
+  id: number,
+  role: 'user' | 'assistant';
+  message: string;
+}

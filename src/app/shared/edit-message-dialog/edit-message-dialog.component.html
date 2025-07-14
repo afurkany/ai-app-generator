@@ -1,0 +1,19 @@
+<!-- NOTE: -->
+<!-- Dialog width and height set in chat.component.ts under onEditUserMessage() -->
+<div class="dialog-container">
+  <mat-dialog-content>
+    <mat-form-field>
+      <textarea matInput
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="20"
+        class="textArea"
+        [(ngModel)]="setupService.activeUserMessage"
+      ></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="onClickCancel()">Cancel</button>
+    <button mat-button cdkFocusInitial (click)="onClickSend()">Send</button>
+  </mat-dialog-actions>
+</div>

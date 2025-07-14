@@ -1,0 +1,115 @@
+<div class="main-container">
+  <mat-tab-group animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
+
+    <mat-tab label="Chat">
+      <!-- horizontal line after tab -->
+      <hr />
+      
+      <div class="chat-container">      
+        <div class="settingsContainer">
+          <!-- model selection dropdown -->
+          <mat-form-field class="model-selection-dropdown">
+            <mat-label>Model Selection</mat-label>
+            <mat-select [(ngModel)]="selectedValue" name="model">
+              @for (model of models; track model) {
+                <mat-option [value]="model.value">{{model.key}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- overflow for chat settings -->
+          <button mat-icon-button [matMenuTriggerFor]="removeSingle">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #removeSingle="matMenu">
+            <button mat-menu-item (click)="onRemoveChatHistoryDialog('0ms', '0ms')">
+              <span>Clear chat history</span>
+            </button>
+          </mat-menu>
+        </div>
+
+        <div class="emptyChatWelcomeContainer" *ngIf="chatHistory.length === 0">
+          <h1>
+            {{ chatWelcomeMessage }}
+          </h1>
+        </div>
+
+        <div class="chat-content-div" #chatContentDiv (scroll)="onChatContentScroll()" *ngIf="chatHistory.length > 0">
+          <div *ngFor="let chat of chatHistory">
+            <div class="messageWrapper" [ngClass]="chat.role === 'user' ? 'userAlign' : 'assistantAlign'">
+              <div class="messageBubble" [ngClass]="chat.role === 'user' ? 'userMessage' : 'assistantMessage'">
+                <pre>{{ chat.message }}</pre>
+                <div *ngIf="chat.role === 'user'">
+                  <button mat-icon-button [matMenuTriggerFor]="removeSingle">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #removeSingle="matMenu">
+                    <button mat-menu-item (click)="onCopyUserMessage(chat.message)">
+                      <span>Copy</span>
+                    </button>
+                    <button mat-menu-item (click)="onEditUserMessage('0ms', '0ms', chat.id)">
+                      <span>Edit</span>
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- chat input field -->
+        <div class="chat-input-container">
+          <!-- scroll below button -->
+          <button mat-icon-button *ngIf="isDisplayScrollBottomButton"
+            class="scrollBottomButton"
+            [matTooltip]="translateService.get('chatComponent.scrollBottomButton')"
+            (click)="onScrollBelowButtonClick()">
+            <mat-icon>arrow_downward</mat-icon>
+          </button>
+
+          <!-- text area -->
+          <mat-form-field appearance="outline" class="chatFormField">
+            <mat-label>Ask me about your application.</mat-label>
+            <textarea matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="6"
+              class="textArea"
+              [(ngModel)]="userMessage.message"
+              (keydown.enter)="onEnterPressed($event)"
+            ></textarea>
+            <button mat-icon-button
+              class="sendIconButton"
+              (click)="onSendMessageClick()"
+            >
+              <mat-icon>send</mat-icon>
+            </button>
+          </mat-form-field>
+          <p class="noteText">App generator model can make mistakes. Please check the outputs of the model.</p>
+        </div>
+      </div>
+    </mat-tab>
+
+    <div *ngFor="let tab of tabs">
+      <mat-tab label="{{ tab }}">
+        <!-- horizontal line after tab -->
+        <hr />
+        
+        <!-- file path -->
+        <div class="filePathContainer">
+          <p class="filePathText">File path to be written</p>
+        </div>
+
+        <div class="fileContentContainer">
+          <div class="numberColumn">
+            <div *ngFor="let i of range(highlightedLines.length); let idx = index">
+              {{ idx + 1 }}
+            </div>
+          </div>
+          <pre class="contentColumn"><code [innerHTML]="codeContent"></code></pre>
+        </div>
+      </mat-tab>
+    </div>
+
+  </mat-tab-group>
+</div>

@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+}
+
+.copyMessage {
+  color: #f1f1f1;
+}
+
+.clearSnackbarIcon {
+  color: #f1f1f1;
+}

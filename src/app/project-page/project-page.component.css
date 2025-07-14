@@ -3,7 +3,6 @@
 	flex-direction: row;
   height: 100vh;
   margin: 0;
-	background-color: azure
 }
 
 .sideBar {
@@ -11,7 +10,7 @@
 	max-width: fit-content;
 	flex-direction: column;
 	height: 100%;
-	background-color: red;
+	background-color: #ffffff;
 	justify-content: space-between;
 }
 
@@ -20,7 +19,7 @@
 	flex-direction: column;
 	max-width: fit-content;
 	max-height: fit-content;
-	background-color: chartreuse;
+	background-color: #ffffff;
 	
 }
 
@@ -29,7 +28,7 @@
 	flex-direction: column;
 	max-width: fit-content;
 	max-height: fit-content;
-	background-color: aqua;
+	background-color: #ffffff;
 }
 
 .sideNav {
@@ -43,7 +42,7 @@
   cursor: ew-resize;
 	user-select: none;
 	flex-shrink: 0;
-  background-color: #00ffff;
+  background-color: #d1d1d1;
 }
 
 .sideNavExplorer {
@@ -51,7 +50,7 @@
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	background-color: azure;
+	background-color: #f9f9f9;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
@@ -61,21 +60,25 @@
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	background-color: azure;
+	background-color: #f9f9f9;
 }
 
 .sideNavSearch {
 	display: flex;
 	height: 100%;
 	width: 100%;
-	background-color: rgb(0, 255, 247);
+	background-color: #f9f9f9;
+	justify-content: center;
+	align-items: center;
 }
 
 .sideNavSourceControl {
 	display: flex;
 	height: 100%;
 	width: 100%;
-	background-color: rgb(255, 149, 0);
+	background-color: #f9f9f9;
+	justify-content: center;
+	align-items: center;
 }
 
 .sideNavSettings {
@@ -87,9 +90,10 @@
 
 .chatArea {
 	display: flex;
-	flex: 1;
+	flex: 1;  /* necessary for chat component to be able to float when slider moves*/
+	flex-direction: column;
 	height: 100%;
-	background-color: blue;
+	background-color: #ffffff;
 }
 
 .is-hidden {
