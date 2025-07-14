@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Project } from '../common/utility';
+import { Injectable, signal } from '@angular/core';
+import { ChatMessage, Project } from '../common/utility';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +8,18 @@ export class SetupService {
 
   activeProjectPath: string = '';
   screenWidth: number = 400;
+  
+  /* Active user message */
+  /* ------------------- */
+  public _activeUserMessage = signal('');
+
+  public get activeUserMessage(): string {
+    return this._activeUserMessage();
+  }
+
+  public set activeUserMessage(value: string) {
+    this._activeUserMessage.set(value);
+  }
 
   project: Project[] = [
     {

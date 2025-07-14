@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TextFieldModule } from '@angular/cdk/text-field';
@@ -17,11 +17,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ModelTypeSelection, ChatMessage } from '../../common/utility';
 import { RemoveChatHistoryDialogComponent } from '../../shared/remove-chat-history-dialog/remove-chat-history-dialog.component';
+import { EditMessageDialogComponent } from '../../shared/edit-message-dialog/edit-message-dialog.component';
 import { CopyMessageSnackbarComponent } from '../../shared/copy-message-snackbar/copy-message-snackbar.component';
 
 import hljs from 'highlight.js/lib/core';
 import python from 'highlight.js/lib/languages/python';
 import { TranslateService } from '../../services/translate.service';
+import { SetupService } from '../../services/setup.service';
 hljs.registerLanguage('python', python);
 
 
@@ -65,22 +67,29 @@ export class ChatComponent implements OnInit, AfterViewInit {
   chatHistory: ChatMessage[] = [
     {
       id: 1,
-      role: 'assistant',
-      message: `
-      It is a simple command.
-      You can use "ng g c <component_name>" in the terminal.
-      `
+      role: 'user',
+      message: "Hey! I have a problem with Angular application."
     },
     {
       id: 2,
-      role: 'assistant',
-      message: 'Yes, sure. How can I help you?'
+      role: 'user',
+      message: 'How can I create a component in Angular?'
     },
     {
       id: 3,
+      role: 'assistant',
+      message: 'It is a simple command.\nYou can just use "ng g c <component_name>" in the terminal.'
+    },
+    {
+      id: 4,
       role: 'user',
-      message: 'I have a problem with Angular application.'
-    }
+      message: 'I got it thanks! I want to ask anpther question!'
+    },
+    {
+      id: 5,
+      role: 'assistant',
+      message: 'Yes, please.'
+    },
   ];
 
   @ViewChild('chatContentDiv') private chatContentDiv!: ElementRef<HTMLDivElement>;
@@ -92,6 +101,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   durationInSeconds = 1.5;
 
   constructor (
+    private setupService: SetupService,
     public translateService: TranslateService,
   ) {}
 
@@ -189,8 +199,33 @@ export class ChatComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onEditUserMessage(id: number) {
-    console.log("id: ", id);
+  onEditUserMessage(enterAnimationDuration: string, exitAnimationDuration: string, id: number) {
+    const dialogRef = this.dialog.open(EditMessageDialogComponent, {
+      width: '600px',
+      maxHeight: '800px',
+      minHeight: '300px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
+
+    dialogRef.afterOpened().subscribe(() => {
+      const foundMessage = this.chatHistory.find((message) => message.id === id);
+
+      if (foundMessage) {
+        this.setupService.activeUserMessage = foundMessage.message;
+      }
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        const index = this.chatHistory.findIndex((message) => message.id === id);
+
+        if (index !== -1) {
+          this.chatHistory[index].message = this.setupService.activeUserMessage;
+          this.chatHistory = [...this.chatHistory.slice(0, index + 1)];
+        }
+      }
+    });
   }
 
   range(n: number): number[] {
