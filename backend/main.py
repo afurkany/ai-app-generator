@@ -1,10 +1,15 @@
 import uvicorn
-import json
 import os
+import copy
 
-from fastapi import FastAPI, Query
-from fastapi.middleware.cors import CORSMiddleware
+from typing import Dict, List
 from pathlib import Path
+
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+from services.chat_service import OllamaChat
 
 app = FastAPI()
 
@@ -52,6 +57,10 @@ projects = [
             "path": file_path.parents[2] / "test_projects/test-project-08",
         }
     ]
+
+class ChatMessage(BaseModel):
+    project_id: int
+    chat_history: List[Dict]
 
 @app.get("/api/v1/")
 def root():
@@ -105,6 +114,30 @@ def get_project_tree(file_path: str = Query(...)):
         tree_data[current_folder_name]["level"] = root_level
 
     return tree_data
+
+@app.post("/api/v1/chat")
+def chat(param: ChatMessage):
+    
+    def modify(x: Dict):
+        x.pop("id")
+        x['content'] = x.pop('message')
+        return x
+
+    try:
+        chat_obj = OllamaChat("qwen3:1.7b")
+        modified_chat_history = copy.deepcopy(param.chat_history)
+        modified_chat_history = list(map(modify, modified_chat_history))
+        role, content = chat_obj.get_response(modified_chat_history)
+
+        param.chat_history.append({
+            "id": len(param.chat_history) + 1,
+            "role": role,
+            "message": content,
+        })
+
+        return param.chat_history
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=5050)

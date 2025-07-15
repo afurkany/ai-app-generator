@@ -19,11 +19,13 @@ import { ModelTypeSelection, ChatMessage } from '../../common/utility';
 import { RemoveChatHistoryDialogComponent } from '../../shared/remove-chat-history-dialog/remove-chat-history-dialog.component';
 import { EditMessageDialogComponent } from '../../shared/edit-message-dialog/edit-message-dialog.component';
 import { CopyMessageSnackbarComponent } from '../../shared/copy-message-snackbar/copy-message-snackbar.component';
+import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 
 import hljs from 'highlight.js/lib/core';
 import python from 'highlight.js/lib/languages/python';
 import { TranslateService } from '../../services/translate.service';
 import { SetupService } from '../../services/setup.service';
+import { ApiService } from '../../services/api.service';
 hljs.registerLanguage('python', python);
 
 
@@ -42,12 +44,14 @@ hljs.registerLanguage('python', python);
     MatTabsModule,
     MatTooltipModule,
     TextFieldModule,
+    LoadingIndicatorComponent,
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
 export class ChatComponent implements OnInit, AfterViewInit {
   selectedValue: string = '';
+  isResponseLoading: boolean = false;
 
   tabs = ["tab1", "tab2", "tab3"];
 
@@ -102,13 +106,14 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   constructor (
     private setupService: SetupService,
+    private apiService: ApiService,
     public translateService: TranslateService,
   ) {}
 
   ngOnInit() {
     // THE BELOW LINE TO BE DELETED LATER
     // this.chatHistory = Array(10).fill(this.chatHistory).flat();
-    // this.chatHistory = [];
+    this.chatHistory = [];
 
     this.chatWelcomeMessage = this.getWelcomeMessage();
     fetch('assets/scripts/trial_script.py')
@@ -132,6 +137,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   onSendMessageClick() {
+    this.isResponseLoading = true;
     let userMessage = { ...this.userMessage };
 
     // check if message content is empty
@@ -142,8 +148,16 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
     userMessage.id = this.chatHistory.length + 1;
     this.chatHistory.push(userMessage);
+
     this.userMessage.message = '';
     this.scrollToBottom();
+
+    this.apiService.getChatResponse(1, this.chatHistory).subscribe((response) => {
+      console.log(response);
+      this.chatHistory = [... response];
+      this.scrollToBottom();
+      this.isResponseLoading = false;
+    })
   }
 
   onEnterPressed(event: any): void {
