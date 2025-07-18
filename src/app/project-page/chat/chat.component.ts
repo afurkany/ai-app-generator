@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, inject, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, Validators } from '@angular/forms';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { SafeHtml } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -40,6 +41,7 @@ hljs.registerLanguage('python', python);
     MatIconModule,
     MatInputModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
     MatTabsModule,
     MatTooltipModule,
@@ -50,21 +52,21 @@ hljs.registerLanguage('python', python);
   styleUrl: './chat.component.css'
 })
 export class ChatComponent implements OnInit, AfterViewInit {
-  selectedValue: string = '';
+
   isResponseLoading: boolean = false;
 
   tabs = ["tab1", "tab2", "tab3"];
 
-  models: ModelTypeSelection[] = [
-    { key: 'qwen2.5:7b', value: 'qwen2.5:7b' },
-    { key: 'qwen3:1.3b', value: 'qwen3:1.3b' },
-    { key: 'qpt-o3', value: 'qpt-o3' },
-  ];
+  modelControl = new FormControl<ModelTypeSelection | null>(null, Validators.required);
+  models: ModelTypeSelection[] = [];
+  selectedModel: string = '';
 
   codeContent: SafeHtml = '';
   highlightedLines: string[] = [];
   scrollAtBottomPosition = 0;
+  isApiInProgress: boolean = false;
   isDisplayScrollBottomButton: boolean = false;
+  isOllamaInstalled: boolean = true;
 
   userMessage: ChatMessage = { id: -1, role: 'user', message: '' };
   chatWelcomeMessage: string = '';
@@ -111,9 +113,22 @@ export class ChatComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
+    this.isApiInProgress = true;
+    
     // THE BELOW LINE TO BE DELETED LATER
     // this.chatHistory = Array(10).fill(this.chatHistory).flat();
     this.chatHistory = [];
+
+    // check ollama installation in the system and get the list of models available
+    this.apiService.getOllamaModels().subscribe((res: string[]) => {
+      res.forEach(modelName => {
+        this.models.push({ key: modelName, value: modelName })
+      });
+      if (this.models.length === 0) {
+        this.isOllamaInstalled = false;
+      }
+      this.isApiInProgress = false;
+    })
 
     this.chatWelcomeMessage = this.getWelcomeMessage();
     fetch('assets/scripts/trial_script.py')
@@ -137,7 +152,6 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   onSendMessageClick() {
-    this.isResponseLoading = true;
     let userMessage = { ...this.userMessage };
 
     // check if message content is empty
@@ -146,14 +160,14 @@ export class ChatComponent implements OnInit, AfterViewInit {
       return
     }
 
+    this.isResponseLoading = true;
     userMessage.id = this.chatHistory.length + 1;
     this.chatHistory.push(userMessage);
 
     this.userMessage.message = '';
     this.scrollToBottom();
 
-    this.apiService.getChatResponse(1, this.chatHistory).subscribe((response) => {
-      console.log(response);
+    this.apiService.getChatResponse(1, this.selectedModel, this.chatHistory,).subscribe((response) => {
       this.chatHistory = [... response];
       this.scrollToBottom();
       this.isResponseLoading = false;

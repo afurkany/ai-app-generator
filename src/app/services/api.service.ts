@@ -42,10 +42,19 @@ export class ApiService {
     return this.http.get<ProjectInfo[]>(`${this.apiUrl}/project/tree`, { params });
   }
 
-  getChatResponse(projectId: number, chatHistory: ChatMessage[]): Observable<any> {
+  getOllamaModels(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/get-ollama-models/`).pipe(
+      catchError(err => {
+        return throwError(() => err);
+      })
+    );
+  }
+
+  getChatResponse(projectId: number, selectedModel: string, chatHistory: ChatMessage[]): Observable<any> {
     const body = {
-      "chat_history": chatHistory,
       "project_id": projectId,
+      "selected_model": selectedModel,
+      "chat_history": chatHistory,
     }
 
     return this.http.post<any>(`${this.apiUrl}/chat`, body).pipe(
