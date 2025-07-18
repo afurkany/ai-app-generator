@@ -17,6 +17,7 @@ import { FileAttachmentComponent } from './file-attachment/file-attachment.compo
 import { ChatComponent } from './chat/chat.component';
 
 import { SetupService } from '../services/setup.service';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-project-page',
@@ -44,6 +45,7 @@ export class ProjectPageComponent implements OnInit{
 
   constructor (
     private router: Router,
+    private apiService: ApiService,
     private setupService: SetupService,
     public translateService: TranslateService,
   ) {}

@@ -5,12 +5,20 @@
       <!-- horizontal line after tab -->
       <hr />
       
-      <div class="chat-container">      
-        <div class="settingsContainer">
+      <div class="chat-container">
+        <div class="spinnerContainer" *ngIf="isApiInProgress">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <div class="ollamaNotInstalledText" *ngIf="!isOllamaInstalled && !isApiInProgress">
+          <p> {{ translateService.get('chatComponent.ollamaNotInstalled') }} </p>
+        </div>
+        
+        <div class="settingsContainer" *ngIf="isOllamaInstalled && !isApiInProgress">
           <!-- model selection dropdown -->
           <mat-form-field class="model-selection-dropdown">
             <mat-label>Model Selection</mat-label>
-            <mat-select [(ngModel)]="selectedValue" name="model">
+            <mat-select [(ngModel)]="selectedModel" name="model" required>
               @for (model of models; track model) {
                 <mat-option [value]="model.value">{{model.key}}</mat-option>
               }
@@ -28,13 +36,13 @@
           </mat-menu>
         </div>
 
-        <div class="emptyChatWelcomeContainer" *ngIf="chatHistory.length === 0">
+        <div class="emptyChatWelcomeContainer" *ngIf="chatHistory.length === 0 && isOllamaInstalled && !isApiInProgress">
           <h1>
             {{ chatWelcomeMessage }}
           </h1>
         </div>
 
-        <div class="chat-content-div" #chatContentDiv (scroll)="onChatContentScroll()" *ngIf="chatHistory.length > 0">
+        <div class="chat-content-div" #chatContentDiv (scroll)="onChatContentScroll()" *ngIf="chatHistory.length > 0 && isOllamaInstalled && !isApiInProgress">
           <div *ngFor="let chat of chatHistory">
             <div class="messageWrapper" [ngClass]="chat.role === 'user' ? 'userAlign' : 'assistantAlign'">
               <div class="messageBubble" [ngClass]="chat.role === 'user' ? 'userMessage' : 'assistantMessage'">
@@ -55,10 +63,11 @@
               </div>
             </div>
           </div>
+          <app-loading-indicator [isLoading]="isResponseLoading"></app-loading-indicator>
         </div>
 
         <!-- chat input field -->
-        <div class="chat-input-container">
+        <div class="chat-input-container" *ngIf="isOllamaInstalled && !isApiInProgress">
           <!-- scroll below button -->
           <button mat-icon-button *ngIf="isDisplayScrollBottomButton"
             class="scrollBottomButton"
@@ -69,23 +78,26 @@
 
           <!-- text area -->
           <mat-form-field appearance="outline" class="chatFormField">
-            <mat-label>Ask me about your application.</mat-label>
+            <mat-label *ngIf="selectedModel === ''"> {{ translateService.get('chatComponent.selectModelNote') }} </mat-label>
+            <mat-label *ngIf="selectedModel !== ''"> {{ translateService.get('chatComponent.textAreaLabel') }} </mat-label>
             <textarea matInput
               cdkTextareaAutosize
               cdkAutosizeMinRows="1"
               cdkAutosizeMaxRows="6"
               class="textArea"
               [(ngModel)]="userMessage.message"
+              [disabled]="selectedModel === '' || isResponseLoading"
               (keydown.enter)="onEnterPressed($event)"
             ></textarea>
             <button mat-icon-button
               class="sendIconButton"
+              [disabled]="selectedModel === '' || isResponseLoading"
               (click)="onSendMessageClick()"
             >
               <mat-icon>send</mat-icon>
             </button>
           </mat-form-field>
-          <p class="noteText">App generator model can make mistakes. Please check the outputs of the model.</p>
+          <p class="noteText"> {{ translateService.get('chatComponent.userNote') }} </p>
         </div>
       </div>
     </mat-tab>

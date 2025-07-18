@@ -12,6 +12,32 @@
   height: 95vh;
 }
 
+.spinnerContainer {
+  display: flex;
+  height: 100%;
+  max-width: 100%;
+  padding: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+mat-spinner {
+  color: #5c5c5c;
+}
+
+.ollamaNotInstalledText {
+  display: flex;
+  height: 100%;
+  max-width: 100%;
+  padding: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.ollamaNotInstalledText p {
+  font-size: large;
+}
+
 .settingsContainer {
   display: flex;
   justify-content: left;

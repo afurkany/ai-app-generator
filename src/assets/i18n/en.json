@@ -23,6 +23,10 @@
     "syncProjectFolder": "Syncronize project folder with the test folder content."
   },
   "chatComponent": {
-    "scrollBottomButton": "Scroll to bottom"
+    "selectModelNote": "Please select a model before starting to chat.",
+    "scrollBottomButton": "Scroll to bottom",
+    "userNote": "App generator model can make mistakes. Please check the outputs of the model.",
+    "ollamaNotInstalled": "There is no connection to any Ollama model. Please ensure that Ollama is installed in your system. Then, you must pull at least one model using: ollama pull <model_name>",
+    "textAreaLabel": "Ask me about your application"
   }
 }
