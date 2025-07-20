@@ -5,7 +5,7 @@
 			<mat-icon>more_vert</mat-icon>
 		</button>
 		<mat-menu #removeMultiple="matMenu">
-			<button mat-menu-item (click)="onClickRemoveAll()">
+			<button mat-menu-item [disabled]="selectedfiles.length === 0" (click)="onClickRemoveAll()">
 				<span>Remove all</span>
 			</button>
 		</mat-menu>

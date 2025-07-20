@@ -37,36 +37,22 @@ export class ExplorerComponent implements OnInit {
     public translateService: TranslateService
   ) {}
 
-  rootFolderName = 'beverages';
-  rawData: any = {
-    'beverages': {
-      child_folder: ['tea', 'coffee'],
-      child_file: ['water'],
-      level: 1,
-    },
-    'tea': {
-      child_folder: ['chinese tea'],
-      child_file: ['black tea', 'white tea'],
-      level: 2,
-    },
-    'coffee': {
-      child_folder: [],
-      child_file: ['americano', 'latte'],
-      level: 2,
-    },
-    'chinese tea': {
-      child_folder: [],
-      child_file: [],
-      level: 3,
-    }
-  };
-
-  tree: TreeNode | null = null;
+  rootFolderName = '';
+  mainFolderPath: string = '';
+  testFolderPath: string = '';
+  mainTree: TreeNode | null = null;
+  testTree: TreeNode | null = null;
+  
 
   ngOnInit() {
-    this.apiService.getProjectTree(this.setupService.activeProjectPath).subscribe((response) => {
-      const folderName = this.setupService.activeProjectPath.split("\\").at(-1) ?? ""
-      this.tree = this.buildTree(response, folderName, 0);
+    this.apiService.getProjectTree().subscribe((response) => {
+      this.mainFolderPath = response.mainPath;
+      let folderName = response.mainPath.split("\\").at(-1) ?? ""
+      this.mainTree = this.buildTree(response.mainData, folderName, 0);
+
+      this.testFolderPath = response.testPath;
+      folderName = response.testPath.split("\\").at(-1) ?? ""
+      this.testTree = this.buildTree(response.testData, folderName, 0);
     })
   }
 
@@ -97,7 +83,7 @@ export class ExplorerComponent implements OnInit {
 
   async onGoToMainProjectFolder(): Promise<void> {
     try {
-      await openPath(this.setupService.activeProjectPath);
+      await openPath(this.mainFolderPath);
     } catch (error) {
       console.error('Error opening folder:', error);
     }
@@ -105,7 +91,7 @@ export class ExplorerComponent implements OnInit {
 
   async onGoToTestProjectFolder(): Promise<void> {
     try {
-      await openPath(this.setupService.activeProjectPath);
+      await openPath(this.testFolderPath);
     } catch (error) {
       console.error('Error opening folder:', error);
     }

@@ -21,7 +21,6 @@ import { ProjectInfo } from '../common/utility';
 import { TranslateService } from '../services/translate.service';
 import { ApiService } from '../services/api.service';
 import { Router } from '@angular/router';
-import { SetupService } from '../services/setup.service';
 
 
 @Component({
@@ -54,7 +53,6 @@ export class HomePageComponent implements OnInit{
   constructor(
     private router: Router,
     private apiService: ApiService,
-    private setupService: SetupService,
     public translateService: TranslateService,
   ) {}
 
@@ -62,8 +60,17 @@ export class HomePageComponent implements OnInit{
     this.translateService.use('en');
 
     this.apiService.getProjects().subscribe((res) => {
-      console.log("res: ", res);
-      this.projectList = [... res];
+      res.forEach((project) => {
+        this.projectList.push({
+            projectId: project.project_id,
+            projectName: project.project_name,
+            mainFolderPath: project.main_folder_path,
+            testFolderPath: project.test_folder_path,
+            creationDate: project.creation_date,
+            lastModificationDate: project.last_modification_date,
+            modelName: project.model_name,
+        })
+      });
     });
   }
 
@@ -76,7 +83,7 @@ export class HomePageComponent implements OnInit{
 
     const term = this.searchValue.toLowerCase();
     return this.projectList.filter(project =>
-      project.path.toLowerCase().includes(term)
+      project.mainFolderPath.toLowerCase().includes(term)
     );
   }
 
@@ -96,7 +103,18 @@ export class HomePageComponent implements OnInit{
 
   removeProject(projectPath: string) {
     this.apiService.removeProject(projectPath).subscribe((res) => {
-      this.projectList = [... res];
+      this.projectList = [];
+      res.forEach((project) => {
+        this.projectList.push({
+            projectId: project.project_id,
+            projectName: project.project_name,
+            mainFolderPath: project.main_folder_path,
+            testFolderPath: project.test_folder_path,
+            creationDate: project.creation_date,
+            lastModificationDate: project.last_modification_date,
+            modelName: project.model_name,
+        })
+      });
     });
   }
 
@@ -115,16 +133,15 @@ export class HomePageComponent implements OnInit{
   }
 
   removeAllProjects() {
-    this.apiService.removeAllProjects().subscribe((res) => {
-      this.projectList = [... res];
+    this.apiService.removeAllProjects().subscribe(() => {
+      this.projectList = [];
     });
   }
 
-  directToProject(projectName: string, projectPath: string) {
-    console.log("projectName: ", projectName);
-    this.setupService.activeProjectPath = projectPath;
-    console.log("this.setupService.activeProjectFolder: ", this.setupService.activeProjectPath);
-    this.router.navigate(['/project']);
+  directToProject(projectId: string) {
+    this.apiService.setActiveProject(projectId).subscribe(() => {
+      this.router.navigate(['/project']);
+    });
   }
 
   async selectFolder(): Promise<void> {
@@ -137,7 +154,18 @@ export class HomePageComponent implements OnInit{
     if (folder && typeof folder === 'string') {
       this.selectedPath = folder;
       this.apiService.addProject(this.selectedPath).subscribe((res) => {
-        this.projectList = [... res];
+        this.projectList = [];
+        res.forEach((project) => {
+          this.projectList.push({
+              projectId: project.project_id,
+              projectName: project.project_name,
+              mainFolderPath: project.main_folder_path,
+              testFolderPath: project.test_folder_path,
+              creationDate: project.creation_date,
+              lastModificationDate: project.last_modification_date,
+              modelName: project.model_name,
+          })
+        });
       })
     }
   }

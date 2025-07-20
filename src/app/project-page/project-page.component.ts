@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { TranslateService } from '../services/translate.service';
 import { SettingsDialogComponent } from '../shared/settings-dialog/settings-dialog.component';
-import { SideNavPanel, SideNavState } from '../common/utility';
+import { Project, ProjectInfo, SideNavPanel, SideNavState } from '../common/utility';
 
 import { ExplorerComponent } from './explorer/explorer.component';
 import { FileAttachmentComponent } from './file-attachment/file-attachment.component';
@@ -52,6 +52,11 @@ export class ProjectPageComponent implements OnInit{
   
   ngOnInit(): void {
     this.translateService.use('en');
+    this.apiService.getActiveProject().subscribe((res) => {
+      const project = this.setupService.convertProjectResponse(res);
+      this.setupService.setActiveProject(project);
+      console.log("project: ", project);
+    })
   }
 
   directToProject() {

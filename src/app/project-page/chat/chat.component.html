@@ -18,7 +18,7 @@
           <!-- model selection dropdown -->
           <mat-form-field class="model-selection-dropdown">
             <mat-label>Model Selection</mat-label>
-            <mat-select [(ngModel)]="selectedModel" name="model" required>
+            <mat-select [(ngModel)]="selectedModel" name="model" required (selectionChange)="onSelectedModelChange()">
               @for (model of models; track model) {
                 <mat-option [value]="model.value">{{model.key}}</mat-option>
               }
@@ -30,7 +30,7 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #removeSingle="matMenu">
-            <button mat-menu-item (click)="onRemoveChatHistoryDialog('0ms', '0ms')">
+            <button mat-menu-item [disabled]="chatHistory.length === 0" (click)="onRemoveChatHistoryDialog('0ms', '0ms')">
               <span>Clear chat history</span>
             </button>
           </mat-menu>
