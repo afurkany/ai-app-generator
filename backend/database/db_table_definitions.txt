@@ -1,0 +1,34 @@
+### Project
+- project_id: uuid (primary key)
+- project_name: str
+- creation_date: datetime
+- last_modification_date: datetime
+- main_folder_path: str
+- test_folder_path: str
+- project_files: File[]
+- model_name: str
+- chat_history: Message[]
+
+### File
+- project_id: uuid (foreign key)
+- file_name: str
+- file_path: str
+
+### Message
+- project_id: uuid (foreign key)
+- timestamp: datetime
+- sender: str -> 'user' or 'assistant'
+- content: str
+
+### Vector Database
+- prompt: str
+- embedded_prompt: vector
+- proposal: str
+- embedded_proposal: vector
+- Feedback: Feedback[]
+
+### Feedback
+- timestamp: datetime
+- rating: int -> 1 to 5
+- content: str
+- embedded_content: vector

@@ -17,7 +17,7 @@
   </button>
 </div>
 
-<app-explorer-node *ngIf="tree" [node]="tree" [rootFolderName]="rootFolderName"></app-explorer-node>
+<app-explorer-node *ngIf="mainTree" [node]="mainTree" [rootFolderName]="rootFolderName"></app-explorer-node>
 
 <hr />
 
@@ -32,4 +32,4 @@
   </button>
   <mat-icon [matTooltip]="translateService.get('explorerComponent.testProjectFolderTooltip')">information</mat-icon>
 </div>
-<app-explorer-node *ngIf="tree" [node]="tree" [rootFolderName]="rootFolderName"></app-explorer-node>
+<app-explorer-node *ngIf="testTree" [node]="testTree" [rootFolderName]="rootFolderName"></app-explorer-node>

@@ -39,23 +39,23 @@
     <mat-card appearance="outlined" class="card" *ngFor="let project of filteredProjects()">
       <div class="card-header">
         <div class="left">
-          <div class="title">{{ project.name }}</div>
-          <div class="subtitle" [matTooltip]="project.path">{{ project.path | endEllipsis:20 }}</div>
+          <div class="title">{{ project.projectName }}</div>
+          <div class="subtitle" [matTooltip]="project.mainFolderPath">{{ project.mainFolderPath | endEllipsis:20 }}</div>
         </div>
         <div class="right">
           <button mat-icon-button [matMenuTriggerFor]="menu" class="moreVertButton">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu" xPosition="after">
-            <button mat-menu-item (click)="directToProject(project.name, project.path)">
+            <button mat-menu-item (click)="directToProject(project.projectId)">
               <mat-icon>edit</mat-icon>
               <span>Edit Project</span>
             </button>
-            <button mat-menu-item (click)="openFolder(project.path)">
+            <button mat-menu-item (click)="openFolder(project.mainFolderPath)">
               <mat-icon>launch</mat-icon>
               <span>Go to Folder</span>
             </button>
-            <button mat-menu-item (click)="openRemoveSingleFileDialog('0ms', '0ms', project.path)">
+            <button mat-menu-item (click)="openRemoveSingleFileDialog('0ms', '0ms', project.projectId)">
               <mat-icon>delete_forever</mat-icon>
               <span>Remove</span>
             </button>

@@ -16,7 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { ModelTypeSelection, ChatMessage } from '../../common/utility';
+import { ModelTypeSelection, ChatMessage, Project, ProjectResponse } from '../../common/utility';
 import { RemoveChatHistoryDialogComponent } from '../../shared/remove-chat-history-dialog/remove-chat-history-dialog.component';
 import { EditMessageDialogComponent } from '../../shared/edit-message-dialog/edit-message-dialog.component';
 import { CopyMessageSnackbarComponent } from '../../shared/copy-message-snackbar/copy-message-snackbar.component';
@@ -27,6 +27,7 @@ import python from 'highlight.js/lib/languages/python';
 import { TranslateService } from '../../services/translate.service';
 import { SetupService } from '../../services/setup.service';
 import { ApiService } from '../../services/api.service';
+import { map, switchMap, take } from 'rxjs';
 hljs.registerLanguage('python', python);
 
 
@@ -57,6 +58,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   tabs = ["tab1", "tab2", "tab3"];
 
+  project: Project | null = null; 
   modelControl = new FormControl<ModelTypeSelection | null>(null, Validators.required);
   models: ModelTypeSelection[] = [];
   selectedModel: string = '';
@@ -70,33 +72,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   userMessage: ChatMessage = { id: -1, role: 'user', message: '' };
   chatWelcomeMessage: string = '';
-  chatHistory: ChatMessage[] = [
-    {
-      id: 1,
-      role: 'user',
-      message: "Hey! I have a problem with Angular application."
-    },
-    {
-      id: 2,
-      role: 'user',
-      message: 'How can I create a component in Angular?'
-    },
-    {
-      id: 3,
-      role: 'assistant',
-      message: 'It is a simple command.\nYou can just use "ng g c <component_name>" in the terminal.'
-    },
-    {
-      id: 4,
-      role: 'user',
-      message: 'I got it thanks! I want to ask anpther question!'
-    },
-    {
-      id: 5,
-      role: 'assistant',
-      message: 'Yes, please.'
-    },
-  ];
+  chatHistory: ChatMessage[] = [];
 
   @ViewChild('chatContentDiv') private chatContentDiv!: ElementRef<HTMLDivElement>;
   @ViewChild('codeBlock') codeBlock!: ElementRef;
@@ -114,23 +90,30 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.isApiInProgress = true;
-    
-    // THE BELOW LINE TO BE DELETED LATER
-    // this.chatHistory = Array(10).fill(this.chatHistory).flat();
-    this.chatHistory = [];
 
-    // check ollama installation in the system and get the list of models available
-    this.apiService.getOllamaModels().subscribe((res: string[]) => {
-      res.forEach(modelName => {
-        this.models.push({ key: modelName, value: modelName })
-      });
-      if (this.models.length === 0) {
-        this.isOllamaInstalled = false;
+    // get active project and compare with ollama models
+    this.apiService.getOllamaModels().pipe(
+      take(1),
+      switchMap(models =>
+        this.setupService.activeProject$.pipe(
+          take(1),
+          map(project => ({ models, project }))
+        )
+      )
+    ).subscribe(({ models, project }) => {
+      this.models = models.map(model => ({ key: model, value: model }));
+      if (project) {
+        this.project = project;
+        this.selectedModel = models.includes(project.modelName) ? project.modelName : '';
+        this.chatHistory = project.chatHistory;
       }
       this.isApiInProgress = false;
-    })
-
+    });
+    
+    // select welcome message randomly 
     this.chatWelcomeMessage = this.getWelcomeMessage();
+
+    // read python script file
     fetch('assets/scripts/trial_script.py')
       .then(res => res.text())
       .then(data => {
@@ -167,11 +150,18 @@ export class ChatComponent implements OnInit, AfterViewInit {
     this.userMessage.message = '';
     this.scrollToBottom();
 
-    this.apiService.getChatResponse(1, this.selectedModel, this.chatHistory,).subscribe((response) => {
-      this.chatHistory = [... response];
-      this.scrollToBottom();
-      this.isResponseLoading = false;
-    })
+    if (this.project) {
+      this.apiService.getChatResponse(
+        this.project.projectId,
+        this.selectedModel,
+        this.chatHistory[this.chatHistory.length - 1],
+        false
+      ).subscribe((response: ChatMessage[]) => {
+        this.chatHistory = [... response];
+        this.scrollToBottom();
+        this.isResponseLoading = false;
+      })
+    }
   }
 
   onEnterPressed(event: any): void {
@@ -209,8 +199,10 @@ export class ChatComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.chatHistory = [];
+      if (result === true && this.project) {
+        this.apiService.removeChatHistory(this.project.projectId).subscribe(() => {
+          this.chatHistory = [];
+        });
       }
     });
   }
@@ -246,14 +238,36 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
+        this.isResponseLoading = true;
         const index = this.chatHistory.findIndex((message) => message.id === id);
 
-        if (index !== -1) {
+        if (index !== -1 && this.project) {
           this.chatHistory[index].message = this.setupService.activeUserMessage;
           this.chatHistory = [...this.chatHistory.slice(0, index + 1)];
+          this.apiService.getChatResponse(
+            this.project.projectId,
+            this.selectedModel,
+            this.chatHistory[this.chatHistory.length - 1],
+            true
+          ).subscribe((response: ChatMessage[]) => {
+            this.chatHistory = [... response];
+            this.scrollToBottom();
+            this.isResponseLoading = false;
+          })
         }
       }
     });
+  }
+
+  onSelectedModelChange() {
+    if (this.project) {
+      const project_id = this.project.projectId;
+      this.apiService.updateProject(
+        project_id, { model_name: this.selectedModel }
+      ).subscribe((updatedProject: ProjectResponse) => {
+        this.project = this.setupService.convertProjectResponse(updatedProject);
+      });
+    }
   }
 
   range(n: number): number[] {
@@ -262,8 +276,10 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   private scrollToBottom(): void {
     setTimeout(() => {
-      const el = this.chatContentDiv.nativeElement;
-      el.scrollTop = el.scrollHeight;
+      if (this.chatHistory.length > 0) {
+        const el = this.chatContentDiv.nativeElement;
+        el.scrollTop = el.scrollHeight;
+      }
     }, 100);
   }
 
